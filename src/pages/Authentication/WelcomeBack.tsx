@@ -4,8 +4,11 @@ import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../utils/AuthContext';
 import NonAuthenticatedLayout from '../../layout/NonAuthenticatedLayout';
+import toast, { Toaster } from 'react-hot-toast';
 
 export const WelcomeBack = () => {
+  // const notify1 = () => toast('Log in with your details below');
+  const notify2 = () => toast("You're not Logged in");
   const loginForm = useRef<HTMLFormElement>(null);
   const navigate = useNavigate();
   const { user, loginUser } = useAuth();
@@ -13,12 +16,11 @@ export const WelcomeBack = () => {
     if (user) {
       navigate('/');
       console.log(user);
-      // alert('authenticated');
+      // notify1();
     }
     navigate('/auth/welcomeBack');
     console.log('not authenticated');
-    // alert('logged out');
-    alert('not authenticated');
+    notify2();
   }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -33,6 +35,7 @@ export const WelcomeBack = () => {
   return (
     <NonAuthenticatedLayout>
       <div className="h-full bg-basecolor flex justify-between text-black">
+        <Toaster />
         <div className="mx-auto my-auto relative -top-[3rem]">
           <img src="/logo.png" alt="" />
         </div>

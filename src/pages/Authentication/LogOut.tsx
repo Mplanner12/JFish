@@ -9,7 +9,7 @@ const Logout = () => {
   const handleLogout = () => {
     logoutUser();
     navigate('/auth/WelcomeBack');
-    console.log('Logout successful');
+    // console.log('Logout successful');
   };
 
   return <button onClick={handleLogout}>Logout</button>;
