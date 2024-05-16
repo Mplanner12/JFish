@@ -14,7 +14,7 @@ const Loader = () => {
       </div>
       <h1>
         {user ? (
-          <p className="text-2xl text-basecolor font-bold relative -top-[15rem] text-center">
+          <p className="text-2xl text-basecolor font-bold relative -top-[14.5rem] text-center">
             Welcome back {user.name}
           </p>
         ) : (
