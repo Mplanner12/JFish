@@ -5,8 +5,8 @@ const Loader = () => {
   const { user } = useAuth();
 
   return (
-    <section className="flex flex-col items-center justify-center bg-inherit">
-      <div className="flex h-screen items-center justify-center bg-white text-basecolor">
+    <section className="flex flex-col items-center justify-center">
+      <div className="flex h-screen items-center justify-center text-basecolor">
         <div className="h-16 w-16 animate-spin rounded-full border-solid border-basecolor border-t-transparent">
           <FishIcon className="h-16 w-16" />
         </div>
