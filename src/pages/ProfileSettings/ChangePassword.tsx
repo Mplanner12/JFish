@@ -71,7 +71,7 @@ export const ChangePassword = () => {
           <button
             id="button"
             type="button"
-            className="mb-[6.5rem] mt-[4.25rem] w-full font-semibold px-6 py-3 text-md transition-all duration-150 ease-linear rounded-3xl shadow outline-none bg-basecolor hover:bg-pink-600 hover:shadow-lg focus:outline-none"
+            className="mb-[6.5rem] mt-[4.25rem] w-full font-semibold px-6 py-3 text-md transition-all duration-150 ease-linear rounded-3xl shadow outline-none bg-basecolor hover:text-white hover:bg-black hover:shadow-lg focus:outline-none"
           >
             Confirm Password
           </button>

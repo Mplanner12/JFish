@@ -4,7 +4,7 @@ export const AddUser = () => {
   return (
     <>
       <DefaultLayout>
-        <div className="w-[55rem] h-fit mx-auto px-[3.5rem] py-12 bg-white border-0">
+        <div className="w-[55rem] h-fit mx-auto px-[3.5rem] text-black py-12 bg-white border-0">
           <div className="flex-col justify-between items-center">
             <div className="flex justify-center p-[1rem]">
               <img src="/logo.png" alt="" width={30} />

@@ -4,7 +4,7 @@ export const UpdateUser = () => {
   return (
     <>
       <DefaultLayout>
-        <div className="w-[55rem] h-fit mx-auto px-[3.5rem] py-12 bg-white border-0">
+        <div className="w-[55rem] h-fit mx-auto px-[3.5rem] text-black py-12 bg-white border-0">
           <div className="flex-col justify-between items-center">
             <div className="flex justify-center p-[1rem]">
               <img src="/logo.png" alt="" width={30} />
@@ -161,7 +161,7 @@ export const UpdateUser = () => {
               <button
                 id="button"
                 type="button"
-                className="mb-[6.5rem] mt-[4.25rem] w-[65%] font-semibold px-6 py-3 text-md transition-all duration-150 ease-linear rounded-3xl shadow outline-none bg-basecolor hover:bg-black text-black hover:text-white hover:shadow-lg focus:outline-none"
+                className="mb-[6.5rem] mt-[4.25rem] w-[65%] font-semibold px-6 py-3 text-md transition-all duration-150 ease-linear rounded-3xl shadow outline-none bg-basecolor  hover:bg-black text-black hover:text-white hover:shadow-lg focus:outline-none"
               >
                 Update User
               </button>

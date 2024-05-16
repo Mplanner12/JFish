@@ -35,9 +35,9 @@ export const SetPassword = () => {
           <button
             id="button"
             type="button"
-            className="mb-[6.5rem] mt-[3.25rem] relative -top-4 w-full font-semibold px-6 py-3 text-md transition-all duration-150 ease-linear rounded-3xl shadow outline-none bg-basecolor hover:bg-pink-600 hover:shadow-lg focus:outline-none"
+            className="mb-[6.5rem] mt-[3.25rem] relative -top-4 w-full font-semibold px-6 py-3 text-md transition-all duration-150 ease-linear rounded-3xl shadow outline-none bg-basecolor hover:text-white hover:bg-black hover:shadow-lg focus:outline-none"
           >
-            Reset Password
+            Set Password
           </button>
         </form>
       </div>
