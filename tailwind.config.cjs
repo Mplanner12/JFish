@@ -7,6 +7,7 @@ module.exports = {
   theme: {
     fontFamily: {
       satoshi: ['Satoshi', 'sans-serif'],
+      lato: ['Lato', 'sans-serif'],
       sans: ['Montserrat Alternates'],
     },
     // C:\Users\HP\Desktop\JFish App\tailwind.config.cjs
@@ -18,10 +19,11 @@ module.exports = {
     },
     extend: {
       colors: {
+        black: '#1A1E20',
         transparent: 'transparent',
         current: 'currentColor',
         purple: '#3f3cbb',
-        basecolor: '#cf9868',
+        basecolor: '#E3C6A5',
         current: 'currentColor',
         transparent: 'transparent',
         'black-2': '#010101',

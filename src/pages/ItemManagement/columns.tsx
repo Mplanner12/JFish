@@ -106,7 +106,7 @@ export const columns: ColumnDef<ItemDataType>[] = [
               onClick={() => navigator.clipboard.writeText(ItemInfo.Amount)}
             >
               <div className="flex justify-between">
-                <img className="border border-b" src="addIcon.png" alt="" />
+                <img className="" src="addIcon.png" alt="" />
                 <button
                   onClick={() => {
                     navigate('/ItemManagement/addstock');

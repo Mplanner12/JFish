@@ -69,7 +69,7 @@ export const columns: ColumnDef<TerminalDataType>[] = [
               onClick={() => navigator.clipboard.writeText(TerminalInfo.IMEI)}
             >
               <div className="flex justify-between">
-                <div className="border border-black p-1 rounded-s-sm">
+                <div className=" rounded-s-sm">
                   <img src="addIcon.png" alt="" />
                 </div>
                 <button

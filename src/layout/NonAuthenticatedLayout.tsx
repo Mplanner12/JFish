@@ -8,7 +8,7 @@ const NonAuthenticatedLayout: React.FC<{ children: ReactNode }> = ({
   // const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="bg-basecolor dark:bg-basecolor dark:text-bodydark">
+    <div className="bg-white md:bg-basecolor dark:bg-basecolor dark:text-bodydark font-lato">
       {/* <!-- ===== Page Wrapper Start ===== --> */}
       <div className="flex h-screen overflow-hidden">
         {/* <!-- ===== Sidebar Start ===== --> */}

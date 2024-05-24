@@ -23,7 +23,6 @@ import {
 
 import { Input } from '@/components/ui/input';
 
-import { RiAddBoxLine } from 'react-icons/ri';
 
 import {
   Table,
@@ -110,9 +109,9 @@ export function DataTable<TData, TValue>({
           </DropdownMenu>
         </div>
         <div className="flex items-center justify-between bg-basecolor rounded-md">
-          <Button className="bg-basecolor text-black hover:bg-basecolor flex items-center justify-around -space-x-1 rounded-md">
-            <RiAddBoxLine size={30} color="black" />
-            Add Item
+          <Button className="w-full bg-basecolor text-black hover:bg-basecolor flex items-center justify-end space-x-2 rounded-md py-6">
+            <img src="/addIcon.png" alt="" />
+            <p>Add Item</p>
           </Button>
         </div>
       </div>

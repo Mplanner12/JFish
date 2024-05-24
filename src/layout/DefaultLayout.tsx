@@ -1,11 +1,19 @@
 import React, { useState, ReactNode } from 'react';
 import Sidebar from '../components/Sidebar/index';
+import AlignJustifyButton from '@/components/AlignJustifyButton';
+// import { AlignJustify } from 'lucide-react';
 
 const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  let [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
+
+  // function handleAlignJustifyClick() {
+  //   // Handle the click event here
+  //   setSidebarOpen((sidebarOpen) => !sidebarOpen);
+  //   console.log(sidebarOpen);
+  // }
 
   return (
-    <div className="dark:bg-boxdark-2 dark:text-bodydark">
+    <div className="dark:bg-boxdark-2 dark:text-bodydark font-lato">
       {/* <!-- ===== Page Wrapper Start ===== --> */}
       <div className="flex h-screen overflow-hidden">
         {/* <!-- ===== Sidebar Start ===== --> */}
@@ -20,7 +28,11 @@ const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
 
           {/* <!-- ===== Main Content Start ===== --> */}
           <main>
-            <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+            <div className="sm:flex sm:flex-col mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+              <AlignJustifyButton
+                sidebarOpen={sidebarOpen}
+                setSidebarOpen={setSidebarOpen}
+              />
               {children}
             </div>
           </main>

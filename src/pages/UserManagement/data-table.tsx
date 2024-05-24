@@ -23,8 +23,6 @@ import {
 
 import { Input } from '@/components/ui/input';
 
-import { RiAddBoxLine } from 'react-icons/ri';
-
 import {
   Table,
   TableBody,
@@ -77,7 +75,7 @@ export function DataTable<TData, TValue>({
         <div className="flex items-center py-4">
           <Input
             placeholder="Search Users"
-            value={(table.getColumn('Email')?.getFilterValue() as string) ?? ''}
+            value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
             onChange={(event: { target: { value: any } }): void | any =>
               table.getColumn('Email')?.setFilterValue(event.target.value)
             }
@@ -113,10 +111,10 @@ export function DataTable<TData, TValue>({
         <div className="flex items-center justify-between bg-basecolor rounded-md">
           <Button
             onClick={() => navigate('/UserManagement/addUser')}
-            className="bg-basecolor text-black hover:bg-basecolor flex items-center justify-around -space-x-1 rounded-md"
+            className="bg-basecolor text-black hover:bg-basecolor flex items-center justify-end space-x-2 rounded-md"
           >
-            <RiAddBoxLine size={30} color="black" />
-            Add User
+            <img src="/UserIcon.png" alt="" />
+            <p>Add User</p>
           </Button>
         </div>
       </div>

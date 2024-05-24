@@ -19,48 +19,59 @@ import { useNavigate } from 'react-router-dom';
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type UsersDataType = {
-  FirstName: string;
-  MiddleName: string;
-  LastName: string;
-  UserName: string;
-  Branch: string;
-  Role: string;
-  ID: string;
-  Phone: number;
-  Email: string;
+  firstname: string;
+  middlename: string;
+  lastname: string;
+  username: string;
+  branch: string;
+  role: string;
+  id: string;
+  phone: number;
+  email: string;
+  enabled: boolean;
+  accountNonExpired: boolean;
+  accountNonLocked: boolean;
+  credentialsNonExpired: boolean;
+  password: string;
+  defaultPassword: boolean;
+  createdBy: string;
+  createdAt: string;
+  modifiedBy: string;
+  modifiedAt: string;
+  authorities: string;
 };
 
 export const columns: ColumnDef<UsersDataType>[] = [
   {
-    accessorKey: 'FirstName',
+    accessorKey: 'firstname',
     header: 'FirstName',
   },
   {
-    accessorKey: 'MiddleName',
+    accessorKey: 'middlename',
     header: 'MiddleName',
   },
   {
-    accessorKey: 'LastName',
+    accessorKey: 'lastname',
     header: 'LastName',
   },
   {
-    accessorKey: 'UserName',
+    accessorKey: 'username',
     header: 'UserName',
   },
   {
-    accessorKey: 'Branch',
+    accessorKey: 'branch',
     header: 'Branch',
   },
   {
-    accessorKey: 'ID',
+    accessorKey: 'id',
     header: 'ID',
   },
   {
-    accessorKey: 'Phone',
+    accessorKey: 'phone',
     header: 'Phone',
   },
   {
-    accessorKey: 'Email',
+    accessorKey: 'email',
     header: ({ column }) => {
       return (
         <Button
@@ -74,7 +85,7 @@ export const columns: ColumnDef<UsersDataType>[] = [
     },
   },
   {
-    accessorKey: 'Role',
+    accessorKey: 'role',
     header: 'Role',
   },
   {
@@ -95,7 +106,7 @@ export const columns: ColumnDef<UsersDataType>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(userInfo.ID)}
+              onClick={() => navigator.clipboard.writeText(userInfo.id)}
             >
               <div className="flex justify-between">
                 <img src="editicon.png" alt="" />

@@ -58,7 +58,10 @@ export const columns1: ColumnDef<ProfileDataType>[] = [
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0 bg-basecolor">
+            <Button
+              variant="ghost"
+              className="relative -left-[3.5rem] md:left-0 h-8 w-8 p-0 bg-basecolor"
+            >
               <span className="sr-only">Open menu</span>
               <AlignJustify className="h-4 w-4" />
             </Button>

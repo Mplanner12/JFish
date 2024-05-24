@@ -69,7 +69,7 @@ export function DataTable1<TData, TValue>({
   });
 
   return (
-    <div className="relative -top-10">
+    <div className="relative -top-8">
       <div className="rounded-md border ">
         <Table>
           <TableHeader>

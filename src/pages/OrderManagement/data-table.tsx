@@ -32,6 +32,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import React from 'react';
+// import { useNavigate } from 'react-router-dom';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -66,17 +67,19 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  // const navigate = useNavigate();
+
   return (
     <div className="relative -top-10">
       <div className="flex items-center justify-between">
         <div className="flex items-center py-4">
           <Input
-            placeholder="Search Terminal"
+            placeholder="Search Oders"
             value={
-              (table.getColumn('BranchName')?.getFilterValue() as string) ?? ''
+              (table.getColumn('ItemID')?.getFilterValue() as string) ?? ''
             }
             onChange={(event: { target: { value: any } }): void | any =>
-              table.getColumn('BranchName')?.setFilterValue(event.target.value)
+              table.getColumn('Email')?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
           />
@@ -107,12 +110,15 @@ export function DataTable<TData, TValue>({
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="flex items-center justify-between bg-basecolor rounded-md">
-          <Button className="bg-basecolor text-black hover:bg-basecolor flex items-center justify-end space-x-2 rounded-md">
-            <img src="/addIcon.png" alt="" />
-            <p>Add Terminal</p>
+        {/* <div className="flex items-center justify-between bg-basecolor rounded-md">
+          <Button
+            onClick={() => navigate('/UserManagement/addUser')}
+            className="bg-basecolor text-black hover:bg-basecolor flex items-center justify-end space-x-2 rounded-md"
+          >
+            <img src="/UserIcon.png" alt="" />
+            <p>Add User</p>
           </Button>
-        </div>
+        </div> */}
       </div>
       <div className="rounded-md border ">
         <Table>

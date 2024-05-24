@@ -3,13 +3,13 @@ import DefaultLayout from '@/layout/DefaultLayout';
 export const ChangePassword = () => {
   return (
     <DefaultLayout>
-      <div className="w-[43rem] mx-auto px-[3.5rem] py-12 bg-white border-0 text-black">
+      <div className="w-full md:w-[43rem] mx-auto md:px-[3.5rem] py-12 bg-white border-0 text-black">
         <div className="flex-col justify-between items-center">
-          <div className="flex justify-center p-[1rem]">
+          {/* <div className="flex justify-center p-[1rem]">
             <img src="/logo.png" alt="" width={30} />
-          </div>
-          <h1 className="text-center text-2xl font-bold mb-[3.5rem] font-sans">
-            Change Password
+          </div> */}
+          <h1 className="text-center text-2xl font-bold mb-[5rem] font-lato">
+            CHANGE PASSWORD
           </h1>
         </div>
         <form id="form" noValidate>
@@ -19,11 +19,11 @@ export const ChangePassword = () => {
               name="old password"
               placeholder="Old Password"
               required
-              className="p-[1rem] rounded-2xl block w-full mt-0 bg-transparent border-2 h-[2.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
+              className="p-[1rem] block w-full mt-0 bg-transparent border-2 h-[3.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
             />
             <label
               htmlFor="Old Password"
-              className="relative duration-300 -top-[4.35rem] -z-1 origin-0 text-gray-500"
+              className="relative duration-300 -top-[5rem] -z-1 origin-0 text-gray-500"
             >
               Old Password
             </label>
@@ -37,11 +37,11 @@ export const ChangePassword = () => {
               name="new Password"
               placeholder="New Password"
               required
-              className="p-[1rem] rounded-2xl block w-full mt-0 bg-transparent border-2 h-[2.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
+              className="p-[1rem] block w-full mt-0 bg-transparent border-2 h-[3.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
             />
             <label
               htmlFor="Branch ID"
-              className="relative duration-300 -top-[4.35rem] -z-1 origin-0 text-gray-500"
+              className="relative duration-300 -top-[5rem] -z-1 origin-0 text-gray-500"
             >
               New Password
             </label>
@@ -55,11 +55,11 @@ export const ChangePassword = () => {
               name="Confirm Password"
               placeholder="Confirm Password"
               required
-              className="p-[1rem] rounded-2xl block w-full mt-0 bg-transparent border-2 h-[2.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
+              className="p-[1rem] block w-full mt-0 bg-transparent border-2 h-[3.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
             />
             <label
               htmlFor="Confirm Password"
-              className="relative duration-300 -top-[4.35rem] -z-1 origin-0 text-gray-500"
+              className="relative duration-300 -top-[5rem] -z-1 origin-0 text-gray-500"
             >
               Confirm Password
             </label>
@@ -71,7 +71,7 @@ export const ChangePassword = () => {
           <button
             id="button"
             type="button"
-            className="mb-[6.5rem] mt-[4.25rem] w-full font-semibold px-6 py-3 text-md transition-all duration-150 ease-linear rounded-3xl shadow outline-none bg-basecolor hover:text-white hover:bg-black hover:shadow-lg focus:outline-none"
+            className="mb-[6.5rem] mt-[4.25rem] w-full h-[3.5rem] font-semibold px-6 py-3 text-md transition-all duration-150 ease-linear shadow outline-none bg-basecolor hover:text-white hover:bg-black hover:shadow-lg focus:outline-none"
           >
             Confirm Password
           </button>

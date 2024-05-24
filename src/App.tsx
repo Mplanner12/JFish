@@ -6,7 +6,7 @@ import PageTitle from './components/PageTitle';
 import SignUp from './pages/Authentication/SignUp';
 import NotFoundPage from './components/Notfoundpage';
 import UserManagement from './pages/UserManagement/UserManagement';
-import { OrderManagement } from './pages/OrderManagement';
+import OrderManagement from './pages/OrderManagement/OrderManagement';
 import ItemManagement from './pages/ItemManagement/ItemManagement';
 import BranchManagement from './pages/BranchManagement/BranchManagement';
 import TerminalManagement from './pages/TerminalManagement/TerminalManagement';
@@ -55,7 +55,7 @@ function App() {
           path="/ItemManagement"
           element={
             <>
-              <PageTitle title="Item Management | JFish APP" />
+              <PageTitle title="Item Management | JTFish APP" />
               <ItemManagement />
             </>
           }
@@ -64,7 +64,7 @@ function App() {
           path="/ItemManagement/addstock"
           element={
             <>
-              <PageTitle title="Add Stock | JFish APP" />
+              <PageTitle title="Add Stock | JTFish APP" />
               <AddStock />
             </>
           }
@@ -73,7 +73,7 @@ function App() {
           path="/UserManagement"
           element={
             <>
-              <PageTitle title="User Management | JFish APP" />
+              <PageTitle title="User Management | JTFish APP" />
               <UserManagement />
             </>
           }
@@ -82,7 +82,7 @@ function App() {
           path="/UserManagement/adduser"
           element={
             <>
-              <PageTitle title="Welcome Back | JFish APP" />
+              <PageTitle title="Add User | JTFish APP" />
               <AddUser />
             </>
           }
@@ -91,7 +91,7 @@ function App() {
           path="/UserManagement/updateuser"
           element={
             <>
-              <PageTitle title="Welcome Back | JFish APP" />
+              <PageTitle title="Update User | JTFish APP" />
               <UpdateUser />
             </>
           }
@@ -101,7 +101,7 @@ function App() {
           // path="/OrderManagement"
           element={
             <>
-              <PageTitle title="Order Management | JFish APP" />
+              <PageTitle title="Order Management | JTFish APP" />
               <OrderManagement />
             </>
           }
@@ -110,7 +110,7 @@ function App() {
           path="/BranchManagement"
           element={
             <>
-              <PageTitle title="Branch Management | JFish APP" />
+              <PageTitle title="Branch Management | JTFish APP" />
               <BranchManagement />
             </>
           }
@@ -119,7 +119,7 @@ function App() {
           path="/BranchManagement/addbranch"
           element={
             <>
-              <PageTitle title="Update Branch | JFish APP" />
+              <PageTitle title="Update Branch | JTFish APP" />
               <AddBranch />
             </>
           }
@@ -128,7 +128,7 @@ function App() {
           path="/BranchManagement/updatebranch"
           element={
             <>
-              <PageTitle title="Branch Management | JFish APP" />
+              <PageTitle title="Branch Management | JTFish APP" />
               <UpdateBranch />
             </>
           }
@@ -137,7 +137,7 @@ function App() {
           path="/TerminalManagement"
           element={
             <>
-              <PageTitle title="Terminal Management | JFish APP" />
+              <PageTitle title="Terminal Management | JTFish APP" />
               <TerminalManagement />
             </>
           }
@@ -146,7 +146,7 @@ function App() {
           path="/TerminalManagement/activateterminal"
           element={
             <>
-              <PageTitle title="Activate Terminal | JFish APP" />
+              <PageTitle title="Activate Terminal | JTFish APP" />
               <ActivateTerminal />
             </>
           }
@@ -155,7 +155,7 @@ function App() {
           path="/ProfileSettings"
           element={
             <>
-              <PageTitle title="Profile Settings | JFish APP" />
+              <PageTitle title="Profile Settings | JTFish APP" />
               <ProfileSettings />
             </>
           }
@@ -164,7 +164,7 @@ function App() {
           path="/ProfileSettings/updateprofile"
           element={
             <>
-              <PageTitle title="Update Profile | JFish APP" />
+              <PageTitle title="Update Profile | JTFish APP" />
               <ProfileSettings />
             </>
           }
@@ -173,7 +173,7 @@ function App() {
           path="/ProfileSettings/changepassword"
           element={
             <>
-              <PageTitle title="Change Password | JFish APP" />
+              <PageTitle title="Change Password | JTFish APP" />
               <ChangePassword />
             </>
           }
@@ -182,7 +182,7 @@ function App() {
           path="/ProfileSettings/setpassword"
           element={
             <>
-              <PageTitle title="Set Password | JFish APP" />
+              <PageTitle title="Set Password | JTFish APP" />
               <SetPassword />
             </>
           }
@@ -191,7 +191,7 @@ function App() {
           path="/ProfileSettings/resetpassword"
           element={
             <>
-              <PageTitle title="Reset Password | JFish APP" />
+              <PageTitle title="Reset Password | JTFish APP" />
               <ResetPassword />
             </>
           }
@@ -200,7 +200,7 @@ function App() {
           path="/auth/signin"
           element={
             <>
-              <PageTitle title="Signin | JFish APP" />
+              <PageTitle title="Signin | JTFish APP" />
               <SignIn />
             </>
           }
@@ -209,7 +209,7 @@ function App() {
           path="/auth/welcomeBack"
           element={
             <>
-              <PageTitle title="Welcome Back | JFish APP" />
+              <PageTitle title="Welcome Back | JTFish APP" />
               <WelcomeBack />
             </>
           }
@@ -218,7 +218,7 @@ function App() {
           path="/auth/signup"
           element={
             <>
-              <PageTitle title="Signup | JFish APP" />
+              <PageTitle title="Signup | JTFish APP" />
               <SignUp />
             </>
           }
@@ -228,7 +228,7 @@ function App() {
           path="*"
           element={
             <>
-              <PageTitle title="404 | JFish APP" />
+              <PageTitle title="404 | JTFish APP" />
               <NotFoundPage />
             </>
           }
