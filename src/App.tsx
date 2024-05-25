@@ -3,7 +3,7 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import Loader from './common/Loader';
 import PageTitle from './components/PageTitle';
 // import SignIn from './pages/Authentication/SignIn';
-import SignUp from './pages/Authentication/SignUp';
+// import SignUp from './pages/Authentication/SignUp';
 import NotFoundPage from './components/Notfoundpage';
 import UserManagement from './pages/UserManagement/UserManagement';
 import OrderManagement from './pages/OrderManagement/OrderManagement';
@@ -214,7 +214,7 @@ function App() {
             </>
           }
         />
-        <Route
+        {/* <Route
           path="/auth/signup"
           element={
             <>
@@ -222,7 +222,7 @@ function App() {
               <SignUp />
             </>
           }
-        />
+        /> */}
         {/* 404 Route */}
         <Route
           path="*"

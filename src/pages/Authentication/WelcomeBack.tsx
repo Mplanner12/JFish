@@ -36,32 +36,34 @@ export const WelcomeBack = () => {
 
   return (
     <NonAuthenticatedLayout>
-      <div className="w-full h-full bg-white md:bg-basecolor p-[5rem]  flex flex-col md:flex-row justify-between text-black">
+      <div className="w-full h-full bg-white md:bg-basecolor p-[5rem] flex flex-col md:flex-row justify-between md:justify-end text-black px-[1rem] md:px-[7rem]">
         <Toaster />
-        <div className="h-full flex flex-col justify-center mx-auto my-auto relative -left-[8rem] -top-[1.5rem]">
+        <div className="h-full flex flex-col justify-center mx-auto my-auto relative md:-left-[8rem] -top-[0.25rem]">
           <div>
             <img
               src="/logo.png"
               alt=""
-              className="hidden md:block w-[22.5rem] relative -top-[1.75rem]"
+              className="hidden md:block w-[318px] h-[317px] relative -top-[4.5rem]"
             />
-            <img
-              src="/logoSmall.png"
-              alt=""
-              className="md:hidden relative top-[5rem] mb-[5.5rem] w-[3.85rem]"
-            />
+            <div className="flex justify-center">
+              <img
+                src="/logoSmall.png"
+                alt=""
+                className="md:hidden relative top-[5rem] mb-[5.5rem] w-[3.85rem]"
+              />
+            </div>
           </div>
-          <h1 className="hidden md:block -mt-[1.5rem] font-bold text-6xl text-center relative top-5">
-            JTFish
+          <h1 className="hidden md:block -mt-[1.5rem] font-bold text-5xl text-center relative -top-[1.5rem]">
+            JTFISH
           </h1>
         </div>
-        <div className="bg-white md:h-fit relative top-[0.25rem] md:pb-0 sm:p-12">
-          <div className="md:w-[28rem] mx-auto py-1 pb-[2.25rem] bg-inherit border-0">
+        <div className="bg-white md:h-fit relative top-[0.25rem] md:pb-0 sm:p-12 md:px-[1.75rem]">
+          <div className="md:w-[428px] mx-auto py-1 pb-[2.25rem] bg-inherit border-0">
             <h1 className="text-center text-2xl md:text-[2rem] font-[700] mb-[4rem] font-lato">
               WELCOME BACK!
             </h1>
             <form id="form" noValidate ref={loginForm} onSubmit={handleSubmit}>
-              <div className="relative z-0 w-full mb-1">
+              <div className="relative z-0 w-full -mb-[0.75rem]">
                 <input
                   type="text"
                   name="username"
@@ -69,11 +71,11 @@ export const WelcomeBack = () => {
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="abusalmah20@gmail.com"
                   required
-                  className="p-[1rem] font-[400] block w-full mt-0 bg-transparent border-2 h-[3.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
+                  className="p-[1rem] font-[400] block w-full mt-0 bg-transparent border-2 h-[3.25rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
                 />
                 <label
                   htmlFor="name"
-                  className="relative duration-300 font-[400] -top-[5.35rem] -z-1 origin-0 text-gray-500"
+                  className="relative duration-300 font-[400] -top-[5.15rem] -z-1 origin-0 text-gray-500"
                 >
                   Username
                 </label>
@@ -81,19 +83,19 @@ export const WelcomeBack = () => {
                   Name is required
                 </span>
               </div>
-              <div className="relative mt-[3rem] -top-2  z-0 w-full mb-1">
+              <div className="relative mt-[3rem] -top-2 z-0 w-full -mb-[0.75rem]">
                 <input
-                  type="text"
+                  type="password"
                   name="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter password"
                   required
-                  className="p-[1rem] block w-full font-[400] mt-0 bg-transparent border-2 h-[3.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
+                  className="p-[1rem] block w-full font-[400] mt-0 bg-transparent border-2 h-[3.25rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
                 />
                 <label
                   htmlFor="name"
-                  className="relative duration-300 font-[400] -top-[5.35rem] -z-1 origin-0 text-gray-500"
+                  className="relative duration-300 font-[400] -top-[5.15rem] -z-1 origin-0 text-gray-500"
                 >
                   Password
                 </label>
@@ -129,7 +131,7 @@ export const WelcomeBack = () => {
                 </span>
               </fieldset> */}
               <a href="">
-                <p className="flex justify-end font-[400] text-lg relative -top-5 md:top-[1rem] mb-[1.5rem] md:mb-[2.5rem]">
+                <p className="flex justify-end font-[400] text-lg relative top-0 md:top-[1rem] mb-[1.5rem] md:mb-[2.5rem]">
                   Forgot password ?
                 </p>
               </a>
