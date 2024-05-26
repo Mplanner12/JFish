@@ -26,15 +26,15 @@ export type BranchDataType = {
 
 export const columns: ColumnDef<BranchDataType>[] = [
   {
-    accessorKey: 'BranchName',
+    accessorKey: 'name',
     header: 'Branch Name',
   },
   {
-    accessorKey: 'ID',
+    accessorKey: 'id',
     header: 'ID',
   },
   {
-    accessorKey: 'Address',
+    accessorKey: 'address',
     // header: ({ column }) => {
     //   return (
     //     <Button

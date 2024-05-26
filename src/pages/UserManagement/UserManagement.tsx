@@ -8,7 +8,7 @@ export default function UserManagement() {
   const [userData, setUserData] = useState<UsersDataType[]>([]);
   const { fetchWithAuth } = useAuth();
 
-  const fetchData = async () => {
+  const fetchUsers = async () => {
     const response = await fetchWithAuth(
       'http://185.4.176.195:8989/api/users',
       {
@@ -25,7 +25,7 @@ export default function UserManagement() {
   };
 
   useEffect(() => {
-    fetchData();
+    fetchUsers();
   }, []);
 
   return (

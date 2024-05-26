@@ -15,6 +15,8 @@ import {
 
 import { ArrowUpDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../utils/AuthContext';
+import { useState } from 'react';
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -91,10 +93,18 @@ export const columns: ColumnDef<UsersDataType>[] = [
   {
     id: 'actions',
     cell: ({ row }) => {
-      const userInfo = row.original;
+      const userData = row.original;
+      const userid = userData.id;
+      const [id, setId] = useState(userid);
 
       const navigate = useNavigate();
+      const { deleteUser } = useAuth();
 
+      function handleDeleteUser() {
+        setId(userid);
+        deleteUser({ id: id });
+        console.log(id);
+      }
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -106,12 +116,12 @@ export const columns: ColumnDef<UsersDataType>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(userInfo.id)}
+              onClick={() => navigator.clipboard.writeText(userData.id)}
             >
               <div className="flex justify-between">
-                <img src="editicon.png" alt="" />
                 <button onClick={() => navigate('/UserManagement/updateuser')}>
-                  <p>Update User</p>
+                  <img src="editicon.png" alt="" />
+                  <p>Update Info</p>
                 </button>
               </div>
             </DropdownMenuItem>
@@ -119,10 +129,12 @@ export const columns: ColumnDef<UsersDataType>[] = [
             {/* <DropdownMenuItem>View customer</DropdownMenuItem> */}
             <DropdownMenuItem>
               {' '}
-              <div className="flex justify-between">
-                <img src="deleteicon.png" alt="" />
-                <p>Delete User</p>
-              </div>
+              <button onClick={handleDeleteUser}>
+                <div className="flex justify-between">
+                  <img src="deleteicon.png" alt="" />
+                  <p>Delete User</p>
+                </div>
+              </button>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

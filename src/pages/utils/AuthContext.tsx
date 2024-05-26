@@ -1,6 +1,4 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { account } from '../appwriteConfig';
-import { ID } from 'appwrite';
 import Loader from '../../common/Loader';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,11 +6,6 @@ interface AuthContextValue {
   user: any;
   // loginUser: (userInfo: { email: string; password: string }) => Promise<void>;
   logoutUser: () => void;
-  registerUser: (userInfo: {
-    email: string;
-    password1: string;
-    name: string;
-  }) => Promise<void>;
   handleLogin: (userInfo: {
     username: string;
     password: string;
@@ -21,6 +14,7 @@ interface AuthContextValue {
   fetchUsers: () => Promise<void>;
   // addUsersWithAuth: (url: string, options?: {}) => Promise<Response>;
   AddNewUser: (userInfo: {
+    id: string;
     firstname: string;
     middlename: string;
     lastname: string;
@@ -31,6 +25,7 @@ interface AuthContextValue {
     password: string;
   }) => Promise<void>;
   updateUser: (userInfo: {
+    id: string;
     firstname: string;
     middlename: string;
     lastname: string;
@@ -39,36 +34,19 @@ interface AuthContextValue {
     role: string;
     branchId: string;
   }) => Promise<void>;
+  deleteUser: (id: { id: string }) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any | null>(null);
+  const [user] = useState<any | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     checkUserStatus();
   }, []);
-
-  // const loginUser = async (userInfo: { email: string; password: string }) => {
-  //   setLoading(true);
-  //   try {
-  //     await account.createEmailPasswordSession(
-  //       userInfo.email,
-  //       userInfo.password,
-  //     ); // create a new session for the user
-  //     let accountDetails = await account.get(); // get the updated account details
-  //     setUser(accountDetails); // set the user state to the updated account details
-  //     navigate('/');
-  //     console.log(accountDetails);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-
-  //   setLoading(false);
-  // };
 
   const handleLogin = async (userInfo: {
     username: string;
@@ -98,6 +76,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // console.log(data.data);
 
       if (response.ok) {
+        let token = data.data.accessToken;
+        console.log(token);
         localStorage.setItem('authToken', data.data.accessToken);
         alert('Login successful!');
         navigate('/');
@@ -119,33 +99,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.removeItem('authToken');
     navigate('/auth/welcomeback'); // redirect the user to the login page after logging out after logging out
     console.log('Logged out');
-  };
-
-  const registerUser = async (userInfo: {
-    email: string;
-    password1: string;
-    name: string;
-  }) => {
-    setLoading(true);
-    try {
-      let response = await account.create(
-        ID.unique(),
-        userInfo.email,
-        userInfo.password1,
-        userInfo.name,
-      ); // create a new user account
-      console.log('RESPONSE:', response);
-      await account.createEmailPasswordSession(
-        userInfo.email,
-        userInfo.password1,
-      );
-      let accountDetails = await account.get();
-      setUser(accountDetails);
-    } catch (error) {
-      console.log(error);
-    }
-
-    setLoading(false);
   };
 
   const checkUserStatus = async () => {
@@ -183,10 +136,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const fetchWithAuth = async (url: string, { options = {} }: any) => {
     const token = localStorage.getItem('authToken');
-    // console.log(typeof token);
     const headers = {
       ...options.headers,
-      // 'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
 
@@ -199,23 +150,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const AddNewUser = async (userInfo: {
+    id: string;
     firstname: string;
     middlename: string;
     lastname: string;
-    phone: string;
     email: string;
-    role: string;
+    phone: string;
     branchId: string;
     password: string;
+    role: string;
   }) => {
     setLoading(true);
     // setError(null);
+    let token = localStorage.getItem('authToken');
+    console.log(token);
+    console.log(userInfo);
     try {
       const response = await fetch('http://185.4.176.195:8989/api/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(userInfo),
       });
@@ -226,22 +181,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         alert('User Added successfully');
         console.log(data.message);
         console.log(data.data);
-        navigate('/UserManagement');
       } else {
         // setError(data.message || 'User not Added');
         console.log('User not Added');
         alert('User not Added');
-        navigate('/UserManagement');
       }
     } catch (error) {
       // setError('An error occurred. Please try again.');
       console.error('Error:', error);
     } finally {
-      // setIsLoading(false);
+      setLoading(false);
     }
+    navigate('/UserManagement');
   };
 
   const updateUser = async (userInfo: {
+    id: string;
     firstname: string;
     middlename: string;
     lastname: string;
@@ -252,13 +207,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }) => {
     // setIsLoading(true);
     // setError(null);
+    const token = localStorage.getItem('authToken');
+    console.log(token);
     try {
       const response = await fetch('http://185.4.176.195:8989/api/users', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+          Authorization: `Bearer ${token}`,
         },
+        redirect: 'follow',
         body: JSON.stringify(userInfo),
       });
 
@@ -277,7 +235,44 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // setError('An error occurred. Please try again.');
       console.error('Error:', error);
     } finally {
-      // setIsLoading(false);
+      setLoading(false);
+    }
+  };
+
+  const deleteUser = async (id: { id: string }) => {
+    // setIsLoading(true);
+    // setError(null);
+    const token = localStorage.getItem('authToken');
+    console.log(token);
+    try {
+      const response = await fetch(
+        `http://185.4.176.195:8989/api/users/${id.id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          redirect: 'follow',
+          // body: JSON.stringify(id),
+        },
+      );
+      console.log(id);
+      // const data = await response.json();
+
+      if (response.ok) {
+        alert('User deleted successfully');
+        console.log('User deleted successfully');
+        navigate('/UserManagement');
+      } else {
+        // setError(data.message || 'User not updated');
+        console.log('User not deleted');
+      }
+    } catch (error) {
+      // setError('An error occurred. Please try again.');
+      console.error('Error:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -285,11 +280,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     user,
     handleLogin,
     logoutUser,
-    registerUser,
     fetchWithAuth,
     fetchUsers,
     AddNewUser,
     updateUser,
+    deleteUser,
   };
   return (
     <AuthContext.Provider value={contextData}>

@@ -1,11 +1,10 @@
 import DefaultLayout from '@/layout/DefaultLayout';
 import { useState, useRef } from 'react';
 import { useAuth } from '../utils/AuthContext';
-import { useNavigate } from 'react-router-dom';
 
 export const UpdateUser = () => {
-  const navigate = useNavigate();
   const updateUserForm = useRef<HTMLFormElement>(null);
+  const [idvalue, setIdvalue] = useState<string>('');
   const [firstname, setFirstname] = useState<string>('');
   const [middlename, setMiddlename] = useState<string>('');
   const [lastname, setLastname] = useState<string>('');
@@ -13,8 +12,8 @@ export const UpdateUser = () => {
   const [email, setEmail] = useState<string>('');
   const [rolevalue, setRolevalue] = useState<string>('');
   const [branchId, setBranchId] = useState<string>('');
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error] = useState<string | null>(null);
+  const [isLoading] = useState<boolean>(false);
 
   const { updateUser } = useAuth();
 
@@ -64,6 +63,7 @@ export const UpdateUser = () => {
     console.log('button clicked');
     e.preventDefault();
 
+    const id = idvalue as string;
     const firstname = updateUserForm.current?.firstname.value as string;
     const middlename = updateUserForm.current?.middlename.value as string;
     const lastname = updateUserForm.current?.lastname.value as string;
@@ -73,6 +73,7 @@ export const UpdateUser = () => {
     const branchId = updateUserForm.current?.branchId.value as string;
 
     const userInfo = {
+      id,
       firstname,
       middlename,
       lastname,
@@ -84,6 +85,12 @@ export const UpdateUser = () => {
 
     updateUser(userInfo);
   };
+
+  function handleRoleChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    let selectvalue = e.target.value;
+    console.log(selectvalue);
+    setRolevalue((_rolevalue) => selectvalue);
+  }
 
   return (
     <>
@@ -105,6 +112,26 @@ export const UpdateUser = () => {
             <div className="w-full md:px-[1.5rem]">
               <div className="relative z-0 w-full mb-1">
                 <input
+                  value={idvalue}
+                  onChange={(e) => setIdvalue(e.target.value)}
+                  type="text"
+                  name="id"
+                  placeholder="98fa79-k8h1-252u-0252-r5817936858"
+                  required
+                  className="p-[1rem] w-full block  mt-0 bg-transparent border-2 h-[2.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
+                />
+                <label
+                  htmlFor="id"
+                  className="relative duration-300 -top-[4.35rem] -z-1 origin-0 text-gray-500"
+                >
+                  ID
+                </label>
+                <span className="text-sm text-red-600 hidden" id="error">
+                  ID is required
+                </span>
+              </div>
+              <div className="relative z-0 w-full mt-6 mb-1">
+                <input
                   value={firstname}
                   onChange={(e) => setFirstname(e.target.value)}
                   type="text"
@@ -123,7 +150,7 @@ export const UpdateUser = () => {
                   First Name is required
                 </span>
               </div>
-              <div className="relative z-0 w-full mt-10">
+              <div className="relative z-0 w-full mt-6">
                 <input
                   value={middlename}
                   onChange={(e) => setMiddlename(e.target.value)}
@@ -143,7 +170,7 @@ export const UpdateUser = () => {
                   Middle Name is required
                 </span>
               </div>
-              <div className="relative mt-[3rem] -top-2  z-0 w-full mb-1">
+              <div className="relative mt-[2.25rem] -top-2  z-0 w-full mb-1">
                 <input
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
@@ -163,16 +190,19 @@ export const UpdateUser = () => {
                   Phone Number is required
                 </span>
               </div>
-              <div className="relative mt-[3rem] -top-[1.5rem]  z-0 w-full mb-1">
+              <div className="relative mt-[2.25rem] -top-[1.5rem]  z-0 w-full mb-1">
                 <select
                   name="role"
                   value={rolevalue}
-                  onChange={(e) => setRolevalue(e.target.value)}
+                  onChange={handleRoleChange}
                   required
                   className="block appearance-none w-full h-[2.5rem] border-basecolor border-2 hover:border-gray-500 px-4 py-2 pr-8 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 >
-                  <option>Admin</option>
-                  <option>User</option>
+                  <option value={''} disabled hidden>
+                    Choose here
+                  </option>
+                  <option>ADMIN</option>
+                  <option>USERS</option>
                 </select>
                 <label
                   htmlFor="role"
@@ -215,7 +245,7 @@ export const UpdateUser = () => {
                   Last Name is required
                 </span>
               </div>
-              <div className="relative z-0 w-full mt-10">
+              <div className="relative z-0 w-full mt-6">
                 <input
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -235,15 +265,15 @@ export const UpdateUser = () => {
                   Email is required
                 </span>
               </div>
-              <div className="relative mt-[3rem] -top-2  z-0 w-full mb-1">
+              <div className="relative mt-[2.25rem] -top-2  z-0 w-full mb-1">
                 <input
                   value={branchId}
                   onChange={(e) => setBranchId(e.target.value)}
                   type="text"
                   name="branchId"
-                  placeholder="45367252hf"
+                  placeholder="kubwa_branch"
                   required
-                  className="p-[1rem] w-full block mt-0 bg-transparent border-2 h-[2.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
+                  className="uppercase p-[1rem] w-full block mt-0 bg-transparent border-2 h-[2.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
                 />
                 <label
                   htmlFor="branchid"
