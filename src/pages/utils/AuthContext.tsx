@@ -4,15 +4,17 @@ import { useNavigate } from 'react-router-dom';
 
 interface AuthContextValue {
   user: any;
-  // loginUser: (userInfo: { email: string; password: string }) => Promise<void>;
+
+  // Custom Fetch with Auth
+  fetchWithAuth: (url: string, options?: {}) => Promise<Response>;
+  fetchUsers: () => Promise<void>;
+
+  // User Management
   logoutUser: () => void;
   handleLogin: (userInfo: {
     username: string;
     password: string;
   }) => Promise<void>;
-  fetchWithAuth: (url: string, options?: {}) => Promise<Response>;
-  fetchUsers: () => Promise<void>;
-  // addUsersWithAuth: (url: string, options?: {}) => Promise<Response>;
   AddNewUser: (userInfo: {
     id: string;
     firstname: string;
@@ -35,6 +37,18 @@ interface AuthContextValue {
     branchId: string;
   }) => Promise<void>;
   deleteUser: (id: { id: string }) => Promise<void>;
+
+  //  Branch Management
+  AddNewBranch: (branchInfo: {
+    name: string;
+    address: string;
+  }) => Promise<void>;
+  UpdateBranch: (branchInfo: {
+    id: string;
+    name: string;
+    address: string;
+  }) => Promise<void>;
+  DeleteBranch: (id: { id: string }) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -44,21 +58,34 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user] = useState<any | null>(null);
   const navigate = useNavigate();
 
+  // check if user is logged in or not
   useEffect(() => {
     checkUserStatus();
+    // setInterval(() => {
+    //   localStorage.removeItem('authToken');
+    //   navigate('/auth/welcomeback');
+    // }, 3600);
   }, []);
 
+  const checkUserStatus = async () => {
+    let token = localStorage.getItem('authToken');
+    if (token !== null || token !== undefined || token !== '') {
+      navigate('/');
+    } else {
+      navigate('/auth/welcomeback');
+    }
+
+    setLoading(false);
+  };
+
+  // USER AUTHENTICATION
   const handleLogin = async (userInfo: {
     username: string;
     password: string;
   }) => {
-    // event.preventDefault();
-
     const payload = {
       username: userInfo.username,
       password: userInfo.password,
-      // setSuccess: event.target.setSuccess,
-      // setError: event.target.setError,
     };
 
     try {
@@ -71,9 +98,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
       const data = await response.json();
-      // const access = data.data.accessToken;
-      // console.log(access);
-      // console.log(data.data);
 
       if (response.ok) {
         let token = data.data.accessToken;
@@ -84,13 +108,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         console.log(typeof localStorage.getItem('authToken'));
         // Redirect or update the UI as needed
       } else {
-        // setError(data.message || 'Login failed');
         navigate('/auth/welcomeBack');
         console.log('not authenticated');
         // notify2();
       }
     } catch (error) {
-      // setError('An error occurred. Please try again.');
       console.error('Error:', error);
     }
   };
@@ -100,19 +122,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     navigate('/auth/welcomeback'); // redirect the user to the login page after logging out after logging out
     console.log('Logged out');
   };
-
-  const checkUserStatus = async () => {
-    // try {
-    //   let accountDetails = await account.get();
-    //   setUser(accountDetails); // if user is logged in, set the user state to the account details
-    // } catch (error) {
-    navigate('/auth/welcomeback'); // if user is not logged in, redirect the user to the login page
-    //   setUser(null);
-    //   console.log(error);
-    // }
-
-    setLoading(false);
-  }; // check if user is logged in or not
 
   const fetchUsers = async () => {
     const token = localStorage.getItem('authToken');
@@ -134,6 +143,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  // CUSTOM FETCH WITH AUTH
   const fetchWithAuth = async (url: string, { options = {} }: any) => {
     const token = localStorage.getItem('authToken');
     const headers = {
@@ -149,6 +159,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return response;
   };
 
+  // USER MANAGEMENT
+
   const AddNewUser = async (userInfo: {
     id: string;
     firstname: string;
@@ -161,7 +173,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     role: string;
   }) => {
     setLoading(true);
-    // setError(null);
     let token = localStorage.getItem('authToken');
     console.log(token);
     console.log(userInfo);
@@ -205,8 +216,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     role: string;
     branchId: string;
   }) => {
-    // setIsLoading(true);
-    // setError(null);
     const token = localStorage.getItem('authToken');
     console.log(token);
     try {
@@ -276,15 +285,136 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  // BRANCH MANAGEMENT
+
+  const AddNewBranch = async (BranchInfo: {
+    name: string;
+    address: string;
+  }) => {
+    setLoading(true);
+    let token = localStorage.getItem('authToken');
+    console.log(token);
+    console.log(BranchInfo);
+    try {
+      const response = await fetch('http://185.4.176.195:8989/api/branches', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(BranchInfo),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('Branch Added successfully');
+        console.log(data.message);
+        console.log(data.data);
+      } else {
+        // setError(data.message || 'User not Added');
+        console.log('Branch not Added');
+        alert('Branch not Added');
+      }
+    } catch (error) {
+      // setError('An error occurred. Please try again.');
+      console.error('Error:', error);
+    } finally {
+      setLoading(false);
+    }
+    navigate('/BranchManagement');
+  };
+
+  const UpdateBranch = async (BranchInfo: {
+    id: string;
+    name: string;
+    address: string;
+  }) => {
+    setLoading(true);
+    let token = localStorage.getItem('authToken');
+    console.log(BranchInfo);
+    try {
+      const response = await fetch('http://185.4.176.195:8989/api/branches', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(BranchInfo),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('Branch Updated successfully');
+        console.log(data.message);
+        console.log(data.data);
+      } else {
+        // setError(data.message || 'User not Added');
+        console.log('Branch not Updated');
+        alert('Branch not Updated');
+      }
+    } catch (error) {
+      // setError('An error occurred. Please try again.');
+      console.error('Error:', error);
+    } finally {
+      setLoading(false);
+    }
+    navigate('/BranchManagement');
+  };
+
+  const DeleteBranch = async (id: { id: string }) => {
+    setLoading(true);
+    let token = localStorage.getItem('authToken');
+    console.log(id);
+    try {
+      const response = await fetch(
+        `http://185.4.176.195:8989/api/branches/${id.id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      // const data = await response.json();
+
+      if (response.ok) {
+        alert('Branch Deleted successfully');
+        // console.log(data.message);
+        // console.log(data.data);
+        navigate('/BranchManagement');
+      } else {
+        // setError(data.message || 'User not Added');
+        // console.log('Branch not Deleted');
+        alert('Branch not Deleted');
+      }
+    } catch (error) {
+      // setError('An error occurred. Please try again.');
+      console.error('Error:', error);
+    } finally {
+      setLoading(false);
+    }
+    navigate('/BranchManagement');
+  };
+
   const contextData: AuthContextValue = {
     user,
-    handleLogin,
-    logoutUser,
+    // custom fetch with auth
     fetchWithAuth,
     fetchUsers,
+    // user management
+    handleLogin,
+    logoutUser,
     AddNewUser,
     updateUser,
     deleteUser,
+    // branch management
+    AddNewBranch,
+    UpdateBranch,
+    DeleteBranch,
   };
   return (
     <AuthContext.Provider value={contextData}>

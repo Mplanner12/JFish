@@ -1,6 +1,29 @@
 import DefaultLayout from '@/layout/DefaultLayout';
+import React, { useState } from 'react';
+import { useAuth } from '../utils/AuthContext';
 
 export const AddBranch = () => {
+  const { AddNewBranch } = useAuth();
+  const addBranchRef = React.useRef<HTMLFormElement>(null);
+  const [namevalue, setNamevalue] = useState<string>('');
+  const [address, setAddress] = useState<string>('');
+  const [branchId, setBranchId] = useState<string>('');
+  const [isLoading] = useState<boolean>(false);
+
+  function handleAddBranch(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const name = namevalue as string;
+    const address = addBranchRef.current?.address.value;
+    const branchId = addBranchRef.current?.branchId.value;
+
+    const branchInfo = {
+      name,
+      address,
+      branchId,
+    };
+
+    AddNewBranch(branchInfo);
+  }
   return (
     <DefaultLayout>
       <div className="w-full md:w-[43rem] mx-auto md:px-[3.5rem] py-12 bg-white border-0 text-black">
@@ -12,9 +35,16 @@ export const AddBranch = () => {
             ADD BRANCH
           </h1>
         </div>
-        <form id="form" noValidate>
+        <form
+          id="form"
+          noValidate
+          ref={addBranchRef}
+          onSubmit={handleAddBranch}
+        >
           <div className="relative z-0 w-full mb-1">
             <input
+              value={namevalue}
+              onChange={(e) => setNamevalue(e.target.value)}
               type="text"
               name="name"
               placeholder="Enter Branch Name"
@@ -33,8 +63,10 @@ export const AddBranch = () => {
           </div>
           <div className="relative mt-[3rem] -top-2  z-0 w-full mb-1">
             <input
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
               type="text"
-              name="name"
+              name="address"
               placeholder="Enter Branch Address"
               required
               className="p-[1rem] block w-full mt-0 bg-transparent border-2 h-[3rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
@@ -51,8 +83,10 @@ export const AddBranch = () => {
           </div>
           <div className="relative mt-[3rem] -top-2  z-0 w-full mb-1">
             <input
+              value={branchId}
+              onChange={(e) => setBranchId(e.target.value)}
               type="text"
-              name="Branch ID"
+              name="branchId"
               placeholder="Enter Branch ID"
               required
               className="p-[1rem] block w-full mt-0 bg-transparent border-2 h-[3rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
@@ -68,13 +102,14 @@ export const AddBranch = () => {
             </span>
           </div>
 
-          <button
-            id="button"
-            type="button"
-            className="mb-[1.5rem] mt-[4.25rem] w-full h-[3.5rem] font-semibold px-6 py-3 text-md transition-all duration-150 ease-linear shadow outline-none bg-basecolor hover:bg-black hover:text-white hover:shadow-lg focus:outline-none"
-          >
-            Add Branch
-          </button>
+          <div className="flex justify-center mt-2 relative -top-[3rem]">
+            <input
+              id="button"
+              type="submit"
+              value={isLoading ? 'Adding branch...' : 'Add Branch'}
+              className="mb-[6.5rem] mt-[4.25rem] w-full font-semibold px-6 py-3 text-md transition-all duration-150 ease-linear shadow outline-none bg-basecolor  hover:bg-black text-black hover:text-white hover:shadow-lg focus:outline-none"
+            />
+          </div>
         </form>
       </div>
     </DefaultLayout>

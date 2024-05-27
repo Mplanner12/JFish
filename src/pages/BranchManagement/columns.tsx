@@ -13,6 +13,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useAuth } from '../utils/AuthContext';
 
 // import { ArrowUpDown } from 'lucide-react';
 
@@ -20,7 +22,7 @@ import { useNavigate } from 'react-router-dom';
 // You can use a Zod schema here if you want.
 export type BranchDataType = {
   BranchName: string;
-  ID: string;
+  id: string;
   Address: string;
 };
 
@@ -51,7 +53,17 @@ export const columns: ColumnDef<BranchDataType>[] = [
   {
     id: 'actions',
     cell: ({ row }) => {
-      const BranchInfo = row.original;
+      const BranchData = row.original;
+      const branchid = BranchData.id;
+      const [id, setId] = useState(branchid);
+
+      const { DeleteBranch } = useAuth();
+
+      function handleDeleteUser() {
+        setId(branchid);
+        DeleteBranch({ id: id });
+        console.log(id);
+      }
 
       const navigate = useNavigate();
 
@@ -66,7 +78,7 @@ export const columns: ColumnDef<BranchDataType>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(BranchInfo.Address)}
+              onClick={() => navigator.clipboard.writeText(BranchData.Address)}
             >
               <div className="flex justify-between">
                 <img src="editicon.png" alt="" />
@@ -83,7 +95,7 @@ export const columns: ColumnDef<BranchDataType>[] = [
               {' '}
               <div className="flex justify-between">
                 <img src="deleteicon.png" alt="" />
-                <button>
+                <button onClick={handleDeleteUser}>
                   <p className="px-2">Delete Branch</p>
                 </button>
               </div>

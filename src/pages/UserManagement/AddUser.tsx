@@ -19,7 +19,7 @@ export const AddUser = () => {
   const { AddNewUser } = useAuth();
 
   const handleAddUser = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log('button clicked');
+    // console.log('button clicked');
     e.preventDefault();
 
     const id = idvalue as string;
