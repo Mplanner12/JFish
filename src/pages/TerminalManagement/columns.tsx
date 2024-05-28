@@ -13,28 +13,30 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useAuth } from '../utils/AuthContext';
 
 // import { ArrowUpDown } from 'lucide-react';
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type TerminalDataType = {
-  BranchName: string;
+  branch: string;
   SerielNumber: string;
   IMEI: string;
 };
 
 export const columns: ColumnDef<TerminalDataType>[] = [
   {
-    accessorKey: 'BranchName',
+    accessorKey: 'branch',
     header: 'Branch Name',
   },
   {
-    accessorKey: 'SerielNumber',
+    accessorKey: 'serialNumber',
     header: 'Seriel Number',
   },
   {
-    accessorKey: 'IMEI',
+    accessorKey: 'imei',
     // header: ({ column }) => {
     //   return (
     //     <Button
@@ -51,7 +53,17 @@ export const columns: ColumnDef<TerminalDataType>[] = [
   {
     id: 'actions',
     cell: ({ row }) => {
-      const TerminalInfo = row.original;
+      const TerminalData = row.original;
+      const terminaliId = TerminalData.branch;
+      const [branchId, SetBranchId] = useState(terminaliId);
+
+      const { DeleteTerminal } = useAuth();
+
+      function handleDeleteTerminal() {
+        SetBranchId(terminaliId);
+        DeleteTerminal({ branchId: branchId });
+        console.log(branchId);
+      }
 
       const navigate = useNavigate();
 
@@ -66,7 +78,7 @@ export const columns: ColumnDef<TerminalDataType>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(TerminalInfo.IMEI)}
+              onClick={() => navigator.clipboard.writeText(TerminalData.IMEI)}
             >
               <div className="flex justify-between">
                 <div className=" rounded-s-sm">
@@ -85,10 +97,12 @@ export const columns: ColumnDef<TerminalDataType>[] = [
             {/* <DropdownMenuItem>View customer</DropdownMenuItem> */}
             <DropdownMenuItem>
               {' '}
-              <div className="flex justify-between">
-                <img src="deleteicon.png" alt="" />
-                <p className="px-2">Delete Terminal</p>
-              </div>
+              <button onClick={handleDeleteTerminal}>
+                <div className="flex justify-between">
+                  <img src="deleteicon.png" alt="" />
+                  <p className="px-2">Delete Terminal</p>
+                </div>
+              </button>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

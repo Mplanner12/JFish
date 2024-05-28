@@ -6,7 +6,8 @@ import toast, { Toaster } from 'react-hot-toast';
 
 export const WelcomeBack = () => {
   // const notify1 = () => toast('Log in with your details below');
-  const notify2 = () => toast("You're not Logged in");
+  const notify2 = () =>
+    toast("You're not Logged in, Please Enter your details to Log in");
   const loginForm = useRef<HTMLFormElement>(null);
   const navigate = useNavigate();
   const { user, handleLogin } = useAuth();
@@ -14,7 +15,6 @@ export const WelcomeBack = () => {
     if (user) {
       navigate('/');
       console.log(user);
-      // notify1();
     }
     navigate('/auth/welcomeBack');
     console.log('not authenticated');

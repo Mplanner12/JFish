@@ -21,6 +21,7 @@ import { SetPassword } from './pages/ProfileSettings/SetPassword';
 import { ResetPassword } from './pages/ProfileSettings/ResetPassword';
 import { ChangePassword } from './pages/ProfileSettings/ChangePassword';
 import { AddStock } from './pages/ItemManagement/AddStock';
+import { AddTerminal } from './pages/TerminalManagement/AddTerminal';
 
 function App() {
   // const [backendData, setBackendData] = useState<any>([{}]);
@@ -148,6 +149,15 @@ function App() {
             <>
               <PageTitle title="Activate Terminal | JTFish APP" />
               <ActivateTerminal />
+            </>
+          }
+        />
+        <Route
+          path="/TerminalManagement/addterminal"
+          element={
+            <>
+              <PageTitle title="Activate Terminal | JTFish APP" />
+              <AddTerminal />
             </>
           }
         />

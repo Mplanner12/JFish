@@ -4,6 +4,7 @@ import { DataTable1 } from './data-table1';
 import { DataTable2 } from './data-table2';
 import DefaultLayout from '@/layout/DefaultLayout';
 import { ItemData } from './ProfileData';
+import { useAuth } from '../utils/AuthContext';
 
 function getData(): ProfileDataType[] {
   // Fetch data from API.

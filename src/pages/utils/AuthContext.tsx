@@ -1,20 +1,30 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import Loader from '../../common/Loader';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface AuthContextValue {
   user: any;
+  // Authentication
+  setPassword: (userInfo: { password: string }) => Promise<void>;
+  resetPassword: (userInfo: {
+    userId: string;
+    password: string;
+  }) => Promise<void>;
+  changePassword: (userInfo: {
+    oldPassword: string;
+    newPassword: string;
+  }) => Promise<void>;
+  logoutUser: () => void;
+  handleLogin: (userInfo: {
+    username: string;
+    password: string;
+  }) => Promise<void>;
 
   // Custom Fetch with Auth
   fetchWithAuth: (url: string, options?: {}) => Promise<Response>;
   fetchUsers: () => Promise<void>;
 
   // User Management
-  logoutUser: () => void;
-  handleLogin: (userInfo: {
-    username: string;
-    password: string;
-  }) => Promise<void>;
   AddNewUser: (userInfo: {
     id: string;
     firstname: string;
@@ -40,6 +50,7 @@ interface AuthContextValue {
 
   //  Branch Management
   AddNewBranch: (branchInfo: {
+    // id: string;
     name: string;
     address: string;
   }) => Promise<void>;
@@ -49,6 +60,32 @@ interface AuthContextValue {
     address: string;
   }) => Promise<void>;
   DeleteBranch: (id: { id: string }) => Promise<void>;
+
+  // Terminal Management
+  AddNewTerminal: (terminalInfo: {
+    imei: string;
+    serialNumber: string;
+    branchId: string;
+  }) => Promise<void>;
+  ActivateTerminal: (terminalInfo: { serialNumber: string }) => Promise<void>;
+  DeleteTerminal: (branchId: { branchId: string }) => Promise<void>;
+
+  // Item Management
+  AddNewItem: (itemInfo: {
+    imageKey: string;
+    imageUrl: string;
+    description: string;
+    itemSize: string;
+    itemType: string;
+    amount: number;
+    stock: number;
+    branch: number;
+  }) => Promise<void>;
+  AddItemStock: (stockInfo: {
+    itemId: string;
+    quantity: number;
+  }) => Promise<void>;
+  DeleteItem: (id: { id: string }) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -57,20 +94,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const [user] = useState<any | null>(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   // check if user is logged in or not
   useEffect(() => {
     checkUserStatus();
-    // setInterval(() => {
-    //   localStorage.removeItem('authToken');
-    //   navigate('/auth/welcomeback');
-    // }, 3600);
+    deleteSession();
   }, []);
+
+  const deleteSession = () => {
+    setTimeout(() => {
+      logoutUser();
+      alert('Session Expired, Please Login Again');
+    }, 3600000);
+  };
 
   const checkUserStatus = async () => {
     let token = localStorage.getItem('authToken');
     if (token !== null || token !== undefined || token !== '') {
-      navigate('/');
+      navigate(location.pathname);
     } else {
       navigate('/auth/welcomeback');
     }
@@ -79,6 +121,169 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   // USER AUTHENTICATION
+
+  // const getUserInfo = async (userInfo: {
+  //   username: string;
+  //   password: string;
+  // }) => {
+  //   const payload = {
+  //     username: userInfo.username,
+  //     password: userInfo.password,
+  //   };
+
+  //   try {
+  //     const response = await fetch('http://185.4.176.195:8989/api/auth', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(payload),
+  //     });
+
+  //     const data = await response.json();
+  //     if (response.ok && data.message === 'Successful') {
+  //       let token = data.data.accessToken;
+  //       console.log(token);
+  //       localStorage.setItem('authToken', data.data.accessToken);
+  //       alert('Login successful!');
+  //       navigate('/');
+  //       console.log(typeof localStorage.getItem('authToken'));
+  //       // Redirect or update the UI as needed
+  //       let user = data.data;
+  //       return user;
+  //     } else {
+  //       navigate('/auth/welcomeBack');
+  //       alert('Unauthorized');
+  //       console.log('not authenticated');
+  //       // notify2();
+  //     }
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //   }
+  // };
+
+  const setPassword = async (userInfo: { password: string }) => {
+    const payload = {
+      password: userInfo.password,
+    };
+
+    try {
+      const response = await fetch(
+        'http://185.4.176.195:8989/api/auth/set-password',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        },
+      );
+
+      const data = await response.json();
+
+      if (response.ok && data.message === 'Successful') {
+        let token = data.data.accessToken;
+        console.log(token);
+        localStorage.setItem('authToken', data.data.accessToken);
+        alert('password set successfully!');
+        navigate('/');
+        console.log(typeof localStorage.getItem('authToken'));
+        // Redirect or update the UI as needed
+      } else {
+        navigate('/auth/welcomeBack');
+        alert('password not set');
+        console.log('password not set');
+        // notify2();
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const resetPassword = async (userInfo: {
+    userId: string;
+    password: string;
+  }) => {
+    const payload = {
+      userId: userInfo.userId,
+      password: userInfo.password,
+    };
+
+    try {
+      const response = await fetch(
+        'http://185.4.176.195:8989/api/auth/reset-password',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        },
+      );
+
+      const data = await response.json();
+
+      if (response.ok && data.message === 'Successful') {
+        let token = data.data.accessToken;
+        console.log(token);
+        localStorage.setItem('authToken', data.data.accessToken);
+        alert('password has been reset!');
+        navigate('/');
+        console.log(typeof localStorage.getItem('authToken'));
+        // Redirect or update the UI as needed
+      } else {
+        navigate('/auth/welcomeBack');
+        alert('password not reset');
+        console.log('password not reset');
+        // notify2();
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const changePassword = async (userInfo: {
+    oldPassword: string;
+    newPassword: string;
+  }) => {
+    const payload = {
+      oldPassword: userInfo.oldPassword,
+      newPassword: userInfo.newPassword,
+    };
+
+    try {
+      const response = await fetch(
+        'http://185.4.176.195:8989/api/auth/change-password',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        },
+      );
+
+      const data = await response.json();
+
+      if (response.ok && data.message === 'Successful') {
+        let token = data.data.accessToken;
+        console.log(token);
+        localStorage.setItem('authToken', data.data.accessToken);
+        alert('password changed successfully!');
+        navigate('/');
+        console.log(typeof localStorage.getItem('authToken'));
+        // Redirect or update the UI as needed
+      } else {
+        navigate('/auth/welcomeBack');
+        alert('password not changed');
+        console.log('password not changed');
+        // notify2();
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   const handleLogin = async (userInfo: {
     username: string;
     password: string;
@@ -98,17 +303,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
       const data = await response.json();
-
-      if (response.ok) {
-        let token = data.data.accessToken;
-        console.log(token);
+      if (response.ok && data.message === 'Successful') {
+        // let token = data.data.accessToken;
+        // console.log(token);
+        console.log(data.data);
         localStorage.setItem('authToken', data.data.accessToken);
+        localStorage.setItem('userInfo', data.data);
         alert('Login successful!');
         navigate('/');
-        console.log(typeof localStorage.getItem('authToken'));
+        // console.log(typeof localStorage.getItem('authToken'));
         // Redirect or update the UI as needed
+        let user = data.data;
+        return user;
       } else {
         navigate('/auth/welcomeBack');
+        alert('Unauthorized');
         console.log('not authenticated');
         // notify2();
       }
@@ -160,7 +369,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   // USER MANAGEMENT
-
   const AddNewUser = async (userInfo: {
     id: string;
     firstname: string;
@@ -188,14 +396,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       const data = await response.json();
 
-      if (response.ok) {
+      if (response.ok && data.message === 'User created successfully') {
         alert('User Added successfully');
         console.log(data.message);
         console.log(data.data);
       } else {
         // setError(data.message || 'User not Added');
         console.log('User not Added');
-        alert('User not Added');
+        alert(`User not Added: ${data.message}`);
       }
     } catch (error) {
       // setError('An error occurred. Please try again.');
@@ -231,14 +439,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       const data = await response.json();
 
-      if (response.ok) {
+      if (response.ok && data.message === 'Successful') {
         alert('User updated successfully');
         console.log('User updated successfully');
         console.log(data.data);
-        navigate('/UserManagement');
       } else {
         // setError(data.message || 'User not updated');
         console.log('User not updated');
+        alert(data.message);
       }
     } catch (error) {
       // setError('An error occurred. Please try again.');
@@ -246,6 +454,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } finally {
       setLoading(false);
     }
+    navigate('/UserManagement');
   };
 
   const deleteUser = async (id: { id: string }) => {
@@ -267,9 +476,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         },
       );
       console.log(id);
-      // const data = await response.json();
+      const data = await response.json();
 
-      if (response.ok) {
+      if (response.ok && data.message === 'Successful') {
         alert('User deleted successfully');
         console.log('User deleted successfully');
         navigate('/UserManagement');
@@ -283,11 +492,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } finally {
       setLoading(false);
     }
+    navigate('/UserManagement');
   };
 
   // BRANCH MANAGEMENT
-
   const AddNewBranch = async (BranchInfo: {
+    // id: string;
     name: string;
     address: string;
   }) => {
@@ -307,7 +517,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       const data = await response.json();
 
-      if (response.ok) {
+      if (response.ok && data.message === 'Branch created successfully') {
         alert('Branch Added successfully');
         console.log(data.message);
         console.log(data.data);
@@ -345,7 +555,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       const data = await response.json();
 
-      if (response.ok) {
+      if (response.ok && data.message === 'Successful') {
         alert('Branch Updated successfully');
         console.log(data.message);
         console.log(data.data);
@@ -379,9 +589,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         },
       );
 
-      // const data = await response.json();
+      const data = await response.json();
 
-      if (response.ok) {
+      if (response.ok && data.message === 'Successful') {
         alert('Branch Deleted successfully');
         // console.log(data.message);
         // console.log(data.data);
@@ -400,14 +610,248 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     navigate('/BranchManagement');
   };
 
+  // TERMINAL MANAGEMENT
+  const AddNewTerminal = async (terminalInfo: {
+    serialNumber: string;
+    imei: string;
+    branchId: string;
+  }) => {
+    setLoading(true);
+    let token = localStorage.getItem('authToken');
+    console.log(terminalInfo);
+    try {
+      const response = await fetch('http://185.4.176.195:8989/api/terminals/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(terminalInfo),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.message === 'Successful') {
+        alert('Terminal added successfully');
+        console.log(data.message);
+        console.log(data.data);
+      } else {
+        // setError(data.message || 'User not Added');
+        console.log('Terminal not added');
+        alert('Terminal not added');
+      }
+    } catch (error) {
+      // setError('An error occurred. Please try again.');
+      console.error('Error:', error);
+    } finally {
+      setLoading(false);
+    }
+    navigate('/TerminalManagement');
+  };
+
+  const ActivateTerminal = async (terminalInfo: { serialNumber: string }) => {
+    setLoading(true);
+    let token = localStorage.getItem('authToken');
+    console.log(terminalInfo);
+    try {
+      const response = await fetch(
+        'http://185.4.176.195:8989/api/terminals/activation',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(terminalInfo),
+        },
+      );
+
+      const data = await response.json();
+
+      if (response.ok && data.message === 'Successful') {
+        alert('Terminal activated successfully');
+        console.log(data.message);
+        console.log(data.data);
+      } else {
+        // setError(data.message || 'User not Added');
+        console.log('Terminal not activated');
+        alert('Terminal not activated');
+      }
+    } catch (error) {
+      // setError('An error occurred. Please try again.');
+      console.error('Error:', error);
+    } finally {
+      setLoading(false);
+    }
+    navigate('/TerminalManagement');
+  };
+
+  const DeleteTerminal = async (branchId: { branchId: string }) => {
+    setLoading(true);
+    let token = localStorage.getItem('authToken');
+    console.log(branchId);
+    try {
+      const response = await fetch(
+        `http://185.4.176.195:8989/api/terminals/${branchId.branchId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const data = await response.json();
+
+      if (response.ok && data.message === 'Successful') {
+        alert('Terminal Deleted successfully');
+        // console.log(data.message);
+        // console.log(data.data);
+      } else {
+        // setError(data.message || 'User not Added');
+        // console.log('Branch not Deleted');
+        alert('Terminal not Deleted');
+      }
+    } catch (error) {
+      // setError('An error occurred. Please try again.');
+      console.error('Error:', error);
+    } finally {
+      setLoading(false);
+    }
+    navigate('/TerminalManagement');
+  };
+
+  // ITEM MANAGEMENT
+  const AddNewItem = async (itemInfo: {
+    imageKey: string;
+    imageUrl: string;
+    description: string;
+    itemSize: string;
+    itemType: string;
+    amount: number;
+    stock: number;
+    branch: number;
+  }) => {
+    setLoading(true);
+    let token = localStorage.getItem('authToken');
+    console.log(itemInfo);
+    try {
+      const response = await fetch('http://185.4.176.195:8989/api/items', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(itemInfo),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success === true) {
+        alert('Item added successfully');
+        console.log(data.message);
+        console.log(data.data);
+      } else {
+        // setError(data.message || 'User not Added');
+        console.log('Item not added');
+        alert('Item not added');
+      }
+    } catch (error) {
+      // setError('An error occurred. Please try again.');
+      console.error('Error:', error);
+    } finally {
+      setLoading(false);
+    }
+    navigate('/ItemManagement');
+  };
+
+  const AddItemStock = async (stockInfo: {
+    itemId: string;
+    quantity: number;
+  }) => {
+    setLoading(true);
+    let token = localStorage.getItem('authToken');
+    console.log(stockInfo);
+    try {
+      const response = await fetch(
+        'http://185.4.176.195:8989/api/terminals/items/stock',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(stockInfo),
+        },
+      );
+
+      const data = await response.json();
+
+      if (response.ok && data.success === true) {
+        alert('stock added successfully');
+        console.log(data.message);
+        console.log(data.data);
+      } else {
+        // setError(data.message || 'User not Added');
+        console.log('stock not added');
+        alert('stock not added');
+      }
+    } catch (error) {
+      // setError('An error occurred. Please try again.');
+      console.error('Error:', error);
+    } finally {
+      setLoading(false);
+    }
+    navigate('/ItemManagement');
+  };
+
+  const DeleteItem = async (id: { id: string }) => {
+    setLoading(true);
+    let token = localStorage.getItem('authToken');
+    console.log(id);
+    try {
+      const response = await fetch(
+        `http://185.4.176.195:8989/api/items/${id.id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const data = await response.json();
+
+      if (response.ok && data.success === 'true') {
+        alert('Item Deleted successfully');
+      } else {
+        // setError(data.message || 'User not Added');
+        // console.log('Branch not Deleted');
+        alert('Item not Deleted');
+      }
+    } catch (error) {
+      // setError('An error occurred. Please try again.');
+      console.error('Error:', error);
+    } finally {
+      setLoading(false);
+    }
+    navigate('/ItemManagement');
+  };
+
   const contextData: AuthContextValue = {
     user,
+    // Authentication
+    setPassword,
+    resetPassword,
+    changePassword,
+    handleLogin,
+    logoutUser,
     // custom fetch with auth
     fetchWithAuth,
     fetchUsers,
     // user management
-    handleLogin,
-    logoutUser,
     AddNewUser,
     updateUser,
     deleteUser,
@@ -415,6 +859,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     AddNewBranch,
     UpdateBranch,
     DeleteBranch,
+    // terminal management
+    ActivateTerminal,
+    AddNewTerminal,
+    DeleteTerminal,
+    // item management
+    AddNewItem,
+    AddItemStock,
+    DeleteItem,
   };
   return (
     <AuthContext.Provider value={contextData}>

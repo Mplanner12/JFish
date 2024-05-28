@@ -1,15 +1,15 @@
 import { TerminalDataType, columns } from './columns';
 import { DataTable } from './data-table';
 import DefaultLayout from '@/layout/DefaultLayout';
-import { ItemData } from './TerminalData';
+// import { ItemData } from './TerminalData';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../utils/AuthContext';
 
-function getData(): TerminalDataType[] {
-  // Fetch data from API.
-  const data = ItemData;
-  return data;
-}
+// function getData(): TerminalDataType[] {
+//   // Fetch data from API.
+//   // const data = ItemData;
+//   // return data;
+// }
 
 export default function TerminalManagement() {
   const [TerminalData, setTerminalData] = useState<TerminalDataType[]>([]);
@@ -31,15 +31,15 @@ export default function TerminalManagement() {
     // console.log(userData);
   };
 
-  const data = getData();
+  // const data = getData();
 
-  // useEffect(() => {
-  //   fetchTerminals();
-  // }, []);
+  useEffect(() => {
+    fetchTerminals();
+  }, []);
   return (
     <DefaultLayout>
       <div className="container mx-auto py-10">
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={TerminalData} />
       </div>
     </DefaultLayout>
   );

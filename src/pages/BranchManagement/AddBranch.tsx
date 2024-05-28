@@ -14,15 +14,16 @@ export const AddBranch = () => {
     e.preventDefault();
     const name = namevalue as string;
     const address = addBranchRef.current?.address.value;
-    const branchId = addBranchRef.current?.branchId.value;
+    // const id = addBranchRef.current?.branchId.value;
 
     const branchInfo = {
       name,
       address,
-      branchId,
+      // id,
     };
 
     AddNewBranch(branchInfo);
+    console.log(branchInfo);
   }
   return (
     <DefaultLayout>
@@ -81,7 +82,7 @@ export const AddBranch = () => {
               Branch Address is required
             </span>
           </div>
-          <div className="relative mt-[3rem] -top-2  z-0 w-full mb-1">
+          {/* <div className="relative mt-[3rem] -top-2  z-0 w-full mb-1">
             <input
               value={branchId}
               onChange={(e) => setBranchId(e.target.value)}
@@ -100,7 +101,7 @@ export const AddBranch = () => {
             <span className="text-sm text-red-600 hidden" id="error">
               Branch ID is required
             </span>
-          </div>
+          </div> */}
 
           <div className="flex justify-center mt-2 relative -top-[3rem]">
             <input

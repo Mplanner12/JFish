@@ -59,7 +59,7 @@ export const columns: ColumnDef<BranchDataType>[] = [
 
       const { DeleteBranch } = useAuth();
 
-      function handleDeleteUser() {
+      function handleDeleteBranch() {
         setId(branchid);
         DeleteBranch({ id: id });
         console.log(id);
@@ -95,7 +95,7 @@ export const columns: ColumnDef<BranchDataType>[] = [
               {' '}
               <div className="flex justify-between">
                 <img src="deleteicon.png" alt="" />
-                <button onClick={handleDeleteUser}>
+                <button onClick={handleDeleteBranch}>
                   <p className="px-2">Delete Branch</p>
                 </button>
               </div>

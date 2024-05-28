@@ -32,6 +32,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -66,6 +67,8 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const navigate = useNavigate();
+
   return (
     <div className="relative -top-10">
       <div className="flex items-center justify-between">
@@ -73,10 +76,10 @@ export function DataTable<TData, TValue>({
           <Input
             placeholder="Search Terminal"
             value={
-              (table.getColumn('BranchName')?.getFilterValue() as string) ?? ''
+              (table.getColumn('branch')?.getFilterValue() as string) ?? ''
             }
             onChange={(event: { target: { value: any } }): void | any =>
-              table.getColumn('BranchName')?.setFilterValue(event.target.value)
+              table.getColumn('branch')?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
           />
@@ -108,7 +111,10 @@ export function DataTable<TData, TValue>({
           </DropdownMenu>
         </div>
         <div className="flex items-center justify-between bg-basecolor rounded-md">
-          <Button className="bg-basecolor text-black hover:bg-basecolor flex items-center justify-end space-x-2 rounded-md">
+          <Button
+            onClick={() => navigate('/TerminalManagement/addterminal')}
+            className="bg-basecolor text-black hover:bg-basecolor flex items-center justify-end space-x-2 rounded-md"
+          >
             <img src="/addIcon.png" alt="" />
             <p>Add Terminal</p>
           </Button>
