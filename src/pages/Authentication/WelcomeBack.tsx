@@ -5,7 +5,6 @@ import NonAuthenticatedLayout from '../../layout/NonAuthenticatedLayout';
 import toast, { Toaster } from 'react-hot-toast';
 
 export const WelcomeBack = () => {
-  // const notify1 = () => toast('Log in with your details below');
   const notify2 = () =>
     toast("You're not Logged in, Please Enter your details to Log in");
   const loginForm = useRef<HTMLFormElement>(null);
@@ -22,16 +21,19 @@ export const WelcomeBack = () => {
   }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true);
     e.preventDefault();
     const username = loginForm.current?.username.value as string;
     const password = loginForm.current?.password.value as string;
 
     const userInfo = { username, password };
     handleLogin(userInfo);
+    setLoading(false);
   };
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   // const [error, setError] = useState('');
 
   return (
@@ -88,6 +90,7 @@ export const WelcomeBack = () => {
                   type="password"
                   name="password"
                   value={password}
+                  minLength={5}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter password"
                   required
@@ -138,9 +141,10 @@ export const WelcomeBack = () => {
 
               <div className="mb-5">
                 <input
+                  disabled={loading}
                   type="submit"
-                  value="Login"
-                  className="h-[3.5rem] font-[700] hover:bg-black hover:text-white mb-[5.5rem] md:-mb-[2rem] w-full px-6 py-3 text-md transition-all duration-150 ease-linear shadow outline-none bg-basecolor hover:shadow-lg focus:outline-none"
+                  value={`${loading ? 'Loading...' : 'Login'}`}
+                  className="h-[3.5rem] font-[700] disabled:bg-slate-800 disabled:text-slate-500 disabled:cursor-not-allowed hover:bg-black hover:text-white mb-[5.5rem] md:-mb-[2rem] w-full px-6 py-3 text-md transition-all duration-150 ease-linear shadow outline-none bg-basecolor hover:shadow-lg focus:outline-none"
                 />
               </div>
             </form>

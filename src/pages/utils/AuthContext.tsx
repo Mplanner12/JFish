@@ -96,12 +96,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // check if user is logged in or not
+  // on resfresh or load
   useEffect(() => {
     checkUserStatus();
     deleteSession();
   }, []);
 
+  // delete's user session after 1 hour
   const deleteSession = () => {
     setTimeout(() => {
       logoutUser();
@@ -109,6 +110,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }, 3600000);
   };
 
+  // check if user is logged in or not
   const checkUserStatus = async () => {
     let token = localStorage.getItem('authToken');
     if (token !== null || token !== undefined || token !== '') {
@@ -121,7 +123,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   // USER AUTHENTICATION
-
   // const getUserInfo = async (userInfo: {
   //   username: string;
   //   password: string;
@@ -162,6 +163,75 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   //   }
   // };
 
+  const handleLogin = async (userInfo: {
+    username: string;
+    password: string;
+  }) => {
+    const payload = {
+      username: userInfo.username,
+      password: userInfo.password,
+    };
+
+    try {
+      const response = await fetch('http://185.4.176.195:8989/api/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+      if (response.ok && data.message === 'Successful') {
+        // let token = data.data.accessToken;
+        // console.log(token);
+        // console.log(data.data);
+        localStorage.setItem('authToken', data.data.accessToken);
+        localStorage.setItem('userInfo', data.data);
+        alert('Login successful!');
+        navigate('/');
+        // console.log(typeof localStorage.getItem('authToken'));
+        // Redirect or update the UI as needed
+        let user = data.data;
+        return user;
+      } else {
+        navigate('/auth/welcomeBack');
+        alert('Unauthorized');
+        console.log('not authenticated');
+        // notify2();
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const logoutUser = () => {
+    localStorage.removeItem('authToken');
+    navigate('/auth/welcomeback'); // redirect the user to the login page after logging out
+    console.log('Logged out');
+  };
+
+  // GETTING USERS
+  const fetchUsers = async () => {
+    const token = localStorage.getItem('authToken');
+    console.log(typeof token);
+    try {
+      const response = await fetch('http://185.4.176.195:8989/api/users', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token,
+          // Authorization: 'Basic' + btoa('mustapha@jtfish.ng:password'),
+        },
+      });
+      const data = await response.json();
+      // console.log(data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  // USER ACTIONS
   const setPassword = async (userInfo: { password: string }) => {
     const payload = {
       password: userInfo.password,
@@ -182,12 +252,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const data = await response.json();
 
       if (response.ok && data.message === 'Successful') {
-        let token = data.data.accessToken;
-        console.log(token);
+        // let token = data.data.accessToken;
+        // console.log(token);
         localStorage.setItem('authToken', data.data.accessToken);
         alert('password set successfully!');
         navigate('/');
-        console.log(typeof localStorage.getItem('authToken'));
+        // console.log(typeof localStorage.getItem('authToken'));
         // Redirect or update the UI as needed
       } else {
         navigate('/auth/welcomeBack');
@@ -224,12 +294,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const data = await response.json();
 
       if (response.ok && data.message === 'Successful') {
-        let token = data.data.accessToken;
-        console.log(token);
+        // let token = data.data.accessToken;
+        // console.log(token);
         localStorage.setItem('authToken', data.data.accessToken);
         alert('password has been reset!');
         navigate('/');
-        console.log(typeof localStorage.getItem('authToken'));
+        // console.log(typeof localStorage.getItem('authToken'));
         // Redirect or update the UI as needed
       } else {
         navigate('/auth/welcomeBack');
@@ -281,74 +351,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     } catch (error) {
       console.error('Error:', error);
-    }
-  };
-
-  const handleLogin = async (userInfo: {
-    username: string;
-    password: string;
-  }) => {
-    const payload = {
-      username: userInfo.username,
-      password: userInfo.password,
-    };
-
-    try {
-      const response = await fetch('http://185.4.176.195:8989/api/auth', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await response.json();
-      if (response.ok && data.message === 'Successful') {
-        // let token = data.data.accessToken;
-        // console.log(token);
-        console.log(data.data);
-        localStorage.setItem('authToken', data.data.accessToken);
-        localStorage.setItem('userInfo', data.data);
-        alert('Login successful!');
-        navigate('/');
-        // console.log(typeof localStorage.getItem('authToken'));
-        // Redirect or update the UI as needed
-        let user = data.data;
-        return user;
-      } else {
-        navigate('/auth/welcomeBack');
-        alert('Unauthorized');
-        console.log('not authenticated');
-        // notify2();
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-
-  const logoutUser = () => {
-    localStorage.removeItem('authToken');
-    navigate('/auth/welcomeback'); // redirect the user to the login page after logging out after logging out
-    console.log('Logged out');
-  };
-
-  const fetchUsers = async () => {
-    const token = localStorage.getItem('authToken');
-    console.log(typeof token);
-    try {
-      const response = await fetch('http://185.4.176.195:8989/api/users', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token,
-          // Authorization: 'Basic' + btoa('mustapha@jtfish.ng:password'),
-        },
-      });
-      const data = await response.json();
-      console.log(typeof token);
-      console.log(data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
     }
   };
 
