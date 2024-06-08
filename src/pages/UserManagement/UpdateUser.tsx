@@ -1,95 +1,21 @@
 import DefaultLayout from '@/layout/DefaultLayout';
-import { useState, useRef } from 'react';
 import { useAuth } from '../utils/AuthContext';
+import { useForm } from 'react-hook-form';
 
 export const UpdateUser = () => {
-  const updateUserForm = useRef<HTMLFormElement>(null);
-  const [idvalue, setIdvalue] = useState<string>('');
-  const [firstname, setFirstname] = useState<string>('');
-  const [middlename, setMiddlename] = useState<string>('');
-  const [lastname, setLastname] = useState<string>('');
-  const [phone, setPhone] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [rolevalue, setRolevalue] = useState<string>('');
-  const [branchId, setBranchId] = useState<string>('');
-  const [error] = useState<string | null>(null);
-  const [isLoading] = useState<boolean>(false);
-
   const { updateUser } = useAuth();
 
-  // const updateUser = async (userInfo: {
-  //   firstname: string;
-  //   middlename: string;
-  //   lastname: string;
-  //   phone: string;
-  //   email: string;
-  //   role: string;
-  //   branchId: string;
-  // }) => {
-  //   setIsLoading(true);
-  //   setError(null);
-  //   try {
-  //     const response = await UpdateNewUser(
-  //       'http://185.4.176.195:8989/api/users',
-  //       {
-  //         method: 'PUT',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify(userInfo),
-  //       },
-  //     );
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm();
 
-  //     const data = await response.json();
-
-  //     if (response.ok) {
-  //       alert('User updated successfully');
-  //       console.log('User updated successfully');
-  //       console.log(data.data);
-  //       navigate('/UserManagement');
-  //     } else {
-  //       setError(data.message || 'User not updated');
-  //       console.log('User not updated');
-  //     }
-  //   } catch (error) {
-  //     setError('An error occurred. Please try again.');
-  //     console.error('Error:', error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  const handleUserUpdate = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log('button clicked');
-    e.preventDefault();
-
-    const id = idvalue as string;
-    const firstname = updateUserForm.current?.firstname.value as string;
-    const middlename = updateUserForm.current?.middlename.value as string;
-    const lastname = updateUserForm.current?.lastname.value as string;
-    const phone = updateUserForm.current?.phone.value as string;
-    const email = updateUserForm.current?.email.value as string;
-    const role = rolevalue as string;
-    const branchId = updateUserForm.current?.branchId.value as string;
-
-    const userInfo = {
-      id,
-      firstname,
-      middlename,
-      lastname,
-      phone,
-      email,
-      role,
-      branchId,
-    };
-
-    updateUser(userInfo);
-  };
-
-  function handleRoleChange(e: React.ChangeEvent<HTMLSelectElement>) {
-    let selectvalue = e.target.value;
-    console.log(selectvalue);
-    setRolevalue((_rolevalue) => selectvalue);
+  async function onSubmit(data: any) {
+    updateUser(data);
+    console.log(data);
+    reset();
   }
 
   return (
@@ -106,96 +32,99 @@ export const UpdateUser = () => {
             id="form"
             noValidate
             className="flex flex-col justify-center"
-            ref={updateUserForm}
-            onSubmit={handleUserUpdate}
+            onSubmit={handleSubmit(onSubmit)}
           >
             <div className="w-full md:px-[1.5rem]">
               <div className="relative z-0 w-full mb-1">
                 <input
-                  value={idvalue}
-                  onChange={(e) => setIdvalue(e.target.value)}
+                  {...register('id', {
+                    required: 'ID is required',
+                  })}
                   type="text"
                   name="id"
                   placeholder="98fa79-k8h1-252u-0252-r5817936858"
                   required
                   className="p-[1rem] w-full block  mt-0 bg-transparent border-2 h-[2.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
                 />
+                {errors.id && (
+                  <p className="text-red-500 text-sm">{`${errors.id.message}`}</p>
+                )}
                 <label
                   htmlFor="id"
                   className="relative duration-300 -top-[4.35rem] -z-1 origin-0 text-gray-500"
                 >
                   ID
                 </label>
-                <span className="text-sm text-red-600 hidden" id="error">
-                  ID is required
-                </span>
               </div>
               <div className="relative z-0 w-full mt-6 mb-1">
                 <input
-                  value={firstname}
-                  onChange={(e) => setFirstname(e.target.value)}
+                  {...register('firstname', {
+                    required: 'First Name is required',
+                  })}
                   type="text"
                   name="firstname"
                   placeholder="Adams"
                   required
                   className="p-[1rem] w-full block  mt-0 bg-transparent border-2 h-[2.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
                 />
+                {errors.firstname && (
+                  <p className="text-red-500 text-sm">{`${errors.firstname.message}`}</p>
+                )}
                 <label
                   htmlFor="firstname"
                   className="relative duration-300 -top-[4.35rem] -z-1 origin-0 text-gray-500"
                 >
                   First Name
                 </label>
-                <span className="text-sm text-red-600 hidden" id="error">
-                  First Name is required
-                </span>
               </div>
               <div className="relative z-0 w-full mt-6">
                 <input
-                  value={middlename}
-                  onChange={(e) => setMiddlename(e.target.value)}
+                  {...register('middlename', {
+                    required: 'Middle Name is required',
+                  })}
                   type="text"
                   name="middlename"
                   placeholder="Hassan"
                   required
                   className="p-[1rem] w-full block mt-0 bg-transparent border-2 h-[2.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
                 />
+                {errors.middlename && (
+                  <p className="text-red-500 text-sm">{`${errors.middlename.message}`}</p>
+                )}
                 <label
                   htmlFor="middlename"
                   className="relative duration-300 -top-[4.35rem] -z-1 origin-0 text-gray-500"
                 >
                   Middle Name
                 </label>
-                <span className="text-sm text-red-600 hidden" id="error">
-                  Middle Name is required
-                </span>
               </div>
               <div className="relative mt-[2.25rem] -top-2  z-0 w-full mb-1">
                 <input
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  {...register('phone', {
+                    required: 'Phone Number is required',
+                  })}
                   type="number"
                   name="phone"
                   placeholder="09030445778"
                   required
                   className="p-[1rem] w-full block mt-0 bg-transparent border-2 h-[2.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
                 />
+                {errors.phone && (
+                  <p className="text-red-500 text-sm">{`${errors.phone.message}`}</p>
+                )}
                 <label
                   htmlFor="phone"
                   className="relative duration-300 -top-[4.35rem] -z-1 origin-0 text-gray-500"
                 >
                   Phone Number
                 </label>
-                <span className="text-sm text-red-600 hidden" id="error">
-                  Phone Number is required
-                </span>
               </div>
               <div className="relative mt-[2.25rem] -top-[1.5rem]  z-0 w-full mb-1">
                 <select
+                  {...register('role', {
+                    required: 'Role is required',
+                  })}
                   name="role"
-                  value={rolevalue}
-                  onChange={handleRoleChange}
-                  required
                   className="block appearance-none w-full h-[2.5rem] border-basecolor border-2 hover:border-gray-500 px-4 py-2 pr-8 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 >
                   <option value={''} disabled hidden>
@@ -204,6 +133,9 @@ export const UpdateUser = () => {
                   <option>ADMIN</option>
                   <option>USERS</option>
                 </select>
+                {errors.role && (
+                  <p className="text-red-500 text-sm">{`${errors.role.message}`}</p>
+                )}
                 <label
                   htmlFor="role"
                   className="relative duration-300 -top-[4.35rem] -z-1 origin-0 text-gray-500"
@@ -219,82 +151,80 @@ export const UpdateUser = () => {
                     <path d="M14.95 7.95l-3.95 3.95l-3.95-3.95l-.7.7l4.65 4.65l4.65-4.65l-.7-.7z" />
                   </svg>
                 </div>
-                <span className="text-sm text-red-600 hidden" id="error">
-                  Role is required
-                </span>
               </div>
             </div>
             <div className="w-full md:px-[1.5rem]">
               <div className="relative z-0 w-full mb-1">
                 <input
-                  value={lastname}
-                  onChange={(e) => setLastname(e.target.value)}
+                  {...register('lastname', {
+                    required: 'Last Name is required',
+                  })}
                   type="text"
                   name="lastname"
                   placeholder="Taiwo"
-                  required
                   className="p-[1rem] w-full block mt-0 bg-transparent border-2 h-[2.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
                 />
+                {errors.lastname && (
+                  <p className="text-red-500 text-sm">{`${errors.lastname.message}`}</p>
+                )}
                 <label
                   htmlFor="lastname"
                   className="relative duration-300 -top-[4.35rem] -z-1 origin-0 text-gray-500"
                 >
                   Last Name
                 </label>
-                <span className="text-sm text-red-600 hidden" id="error">
-                  Last Name is required
-                </span>
               </div>
               <div className="relative z-0 w-full mt-6">
                 <input
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  {...register('email', {
+                    required: 'Email is required',
+                  })}
                   type="email"
                   name="email"
                   placeholder="ad@jtf.com"
                   required
                   className="p-[1rem] w-full block mt-0 bg-transparent border-2 h-[2.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
                 />
+                {errors.email && (
+                  <p className="text-red-500 text-sm">{`${errors.email.message}`}</p>
+                )}
                 <label
                   htmlFor="email"
                   className="relative duration-300 -top-[4.35rem] -z-1 origin-0 text-gray-500"
                 >
                   Email
                 </label>
-                <span className="text-sm text-red-600 hidden" id="error">
-                  Email is required
-                </span>
               </div>
               <div className="relative mt-[2.25rem] -top-2  z-0 w-full mb-1">
                 <input
-                  value={branchId}
-                  onChange={(e) => setBranchId(e.target.value)}
+                  {...register('branchId', {
+                    required: 'Branch ID is required',
+                  })}
                   type="text"
                   name="branchId"
                   placeholder="kubwa_branch"
                   required
                   className="uppercase p-[1rem] w-full block mt-0 bg-transparent border-2 h-[2.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
                 />
+                {errors.branchId && (
+                  <p className="text-red-500 text-sm">{`${errors.branchId.message}`}</p>
+                )}
                 <label
                   htmlFor="branchid"
                   className="relative duration-300 -top-[4.35rem] -z-1 origin-0 text-gray-500"
                 >
                   Branch ID
                 </label>
-                <span className="text-sm text-red-600 hidden" id="error">
-                  Branch ID is required
-                </span>
               </div>
             </div>
             <div className="flex justify-center relative -top-[3rem]">
               <input
                 id="button"
                 type="submit"
-                value={isLoading ? 'Updating...' : 'Update'}
+                value={isSubmitting ? 'Updating...' : 'Update'}
                 className="mb-[6.5rem] mt-[4.25rem] w-full md:w-[90%] font-semibold px-6 py-3 text-md transition-all duration-150 ease-linear shadow outline-none bg-basecolor  hover:bg-black text-black hover:text-white hover:shadow-lg focus:outline-none"
               />
             </div>
-            {error && <p className="text-red-500">{error}</p>}
           </form>
         </div>
       </DefaultLayout>

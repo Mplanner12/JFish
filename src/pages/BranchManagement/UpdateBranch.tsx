@@ -1,28 +1,20 @@
 import DefaultLayout from '@/layout/DefaultLayout';
-import React, { useState } from 'react';
 import { useAuth } from '../utils/AuthContext';
+import { useForm } from 'react-hook-form';
 
 export const UpdateBranch = () => {
   const { UpdateBranch } = useAuth();
-  const updateBranchRef = React.useRef<HTMLFormElement>(null);
-  const [namevalue, setNamevalue] = useState<string>('');
-  const [address, setAddress] = useState<string>('');
-  const [idvalue, setIdvalue] = useState<string>('');
-  const [isLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm();
 
-  function handleUpdateBranch(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const name = namevalue as string;
-    const address = updateBranchRef.current?.address.value;
-    const id = idvalue as string;
-
-    const branchInfo = {
-      id,
-      name,
-      address,
-    };
-
-    UpdateBranch(branchInfo);
+  function onSubmit(data: any) {
+    console.log(data);
+    UpdateBranch(data);
+    reset();
   }
 
   return (
@@ -33,78 +25,77 @@ export const UpdateBranch = () => {
             UPDATE BRANCH
           </h1>
         </div>
-        <form
-          id="form"
-          noValidate
-          ref={updateBranchRef}
-          onSubmit={handleUpdateBranch}
-        >
+        <form id="form" noValidate onSubmit={handleSubmit(onSubmit)}>
           <div className="relative z-0 w-full mb-1">
             <input
-              value={idvalue}
-              onChange={(e) => setIdvalue(e.target.value)}
+              {...register('id', {
+                required: 'ID is required',
+              })}
               type="text"
               name="id"
               placeholder="54678-6487-abc4-46JTF"
-              required
               className="p-[1rem] block w-full mt-0 bg-transparent border-2 h-[3.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
             />
+            {errors.id && (
+              <p className="text-sm text-red-600 hidden" id="error">
+                {`${errors.id.message}`}
+              </p>
+            )}
             <label
               htmlFor="id"
               className="relative duration-300 -top-[5rem] -z-1 origin-0 text-gray-500"
             >
               ID
             </label>
-            <span className="text-sm text-red-600 hidden" id="error">
-              ID is required
-            </span>
           </div>
           <div className="relative mt-[3rem] -top-2  z-0 w-full mb-1">
             <input
-              value={namevalue}
-              onChange={(e) => setNamevalue(e.target.value)}
+              {...register('name', {
+                required: 'Name is required',
+              })}
               type="text"
               name="name"
               placeholder="Kubwa"
-              required
               className="p-[1rem] block w-full mt-0 bg-transparent border-2 h-[3.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
             />
+            {errors.name && (
+              <p className="text-red-500 -mb-3">{`${errors.name.message}`}`</p>
+            )}
             <label
               htmlFor="name"
               className="relative duration-300 -top-[5rem] -z-1 origin-0 text-gray-500"
             >
               Name
             </label>
-            <span className="text-sm text-red-600 hidden" id="error">
-              Name is required
-            </span>
           </div>
           <div className="relative mt-[3rem] -top-2  z-0 w-full mb-1">
             <input
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
+              {...register('address', {
+                required: 'Branch Address is required',
+              })}
               type="text"
               name="address"
               placeholder="kubwa"
-              required
               className="p-[1rem] block w-full mt-0 bg-transparent border-2 h-[3.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
             />
+            {errors.address && (
+              <p className="text-red-500 -mb-3">
+                {`${errors.address.message}`}`
+              </p>
+            )}
             <label
               htmlFor="Branch addres"
               className="relative duration-300 -top-[5rem] -z-1 origin-0 text-gray-500"
             >
               Branch Address
             </label>
-            <span className="text-sm text-red-600 hidden" id="error">
-              Branch Address is required
-            </span>
           </div>
 
           <div className="flex justify-center mt-2 relative -top-[3rem]">
             <input
               id="button"
               type="submit"
-              value={isLoading ? 'Updating branch...' : 'Update Branch'}
+              value={isSubmitting ? 'Updating branch...' : 'Update Branch'}
               className="mb-[6.5rem] mt-[4.25rem] w-full font-semibold px-6 py-3 text-md transition-all duration-150 ease-linear shadow outline-none bg-basecolor  hover:bg-black text-black hover:text-white hover:shadow-lg focus:outline-none"
             />
           </div>

@@ -41,7 +41,7 @@ export const columns: ColumnDef<OrderDataType>[] = [
   },
   {
     accessorKey: 'Recapname',
-    header: 'Recap.name',
+    header: 'Recipient name',
   },
   {
     accessorKey: 'Branch',
@@ -49,15 +49,15 @@ export const columns: ColumnDef<OrderDataType>[] = [
   },
   {
     accessorKey: 'Recapphone',
-    header: 'Recap.phone',
+    header: 'Recipient phone',
   },
   {
     accessorKey: 'Recapaddress',
-    header: 'Recap.address',
+    header: 'Recipient address',
   },
   {
     accessorKey: 'RecapLandmark',
-    header: 'Recap.Landmark',
+    header: 'Recipient Landmark',
   },
   {
     accessorKey: 'ItemID',

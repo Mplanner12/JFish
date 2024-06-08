@@ -1,56 +1,23 @@
 import DefaultLayout from '@/layout/DefaultLayout';
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import { useAuth } from '../utils/AuthContext';
+import { useForm } from 'react-hook-form';
 
 export const AddUser = () => {
-  const AddUserForm = useRef<HTMLFormElement>(null);
-  const [idvalue, setIdvalue] = useState<string>('');
-  const [firstname, setFirstname] = useState<string>('');
-  const [middlename, setMiddlename] = useState<string>('');
-  const [lastname, setLastname] = useState<string>('');
-  const [phone, setPhone] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [rolevalue, setRolevalue] = useState<string>('');
-  const [branchId, setBranchId] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [error] = useState<string | null>(null);
-  const [isLoading] = useState<boolean>(false);
-
   const { AddNewUser } = useAuth();
 
-  const handleAddUser = (e: React.FormEvent<HTMLFormElement>) => {
-    // console.log('button clicked');
-    e.preventDefault();
+  const AddUserForm = useRef<HTMLFormElement>(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm();
 
-    const id = idvalue as string;
-    const firstname = AddUserForm.current?.firstname.value as string;
-    const middlename = AddUserForm.current?.middlename.value as string;
-    const lastname = AddUserForm.current?.lastname.value as string;
-    const phone = AddUserForm.current?.phone.value as string;
-    const email = AddUserForm.current?.email.value as string;
-    const role = rolevalue as string;
-    const branchId = AddUserForm.current?.branchId.value as string;
-    const password = AddUserForm.current?.password.value as string;
-
-    const userInfo = {
-      id,
-      firstname,
-      middlename,
-      lastname,
-      phone,
-      email,
-      role,
-      branchId,
-      password,
-    };
-
-    AddNewUser(userInfo);
-  };
-
-  function handleRoleChange(e: React.ChangeEvent<HTMLSelectElement>) {
-    let selectvalue = e.target.value;
-    console.log(selectvalue);
-    setRolevalue((_rolevalue) => selectvalue);
+  async function onSubmit(data: any) {
+    AddNewUser(data);
+    console.log(data);
+    reset();
   }
 
   return (
@@ -66,94 +33,78 @@ export const AddUser = () => {
             </h1>
           </div>
 
-          <form id="form" noValidate onSubmit={handleAddUser} ref={AddUserForm}>
-            <div className="">
-              <div className="relative z-0 w-full mb-1">
-                <input
-                  value={idvalue}
-                  onChange={(e) => setIdvalue(e.target.value)}
-                  type="text"
-                  name="id"
-                  placeholder="98fa79-k8h1-252u-0252-r5817936858"
-                  required
-                  className="p-[1rem] w-full block  mt-0 bg-transparent border-2 h-[2.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
-                />
-                <label
-                  htmlFor="id"
-                  className="relative duration-300 -top-[4.35rem] -z-1 origin-0 text-gray-500"
-                >
-                  ID
-                </label>
-                <span className="text-sm text-red-600 hidden" id="error">
-                  ID is required
-                </span>
-              </div>
+          <form
+            id="form"
+            noValidate
+            onSubmit={handleSubmit(onSubmit)}
+            ref={AddUserForm}
+            className="flex flex-col justify-center items-center"
+          >
+            <div className="md:w-[23rem]">
               <div className="relative z-0 w-full mb-1 mt-6">
                 <input
+                  {...register('firstname', {
+                    required: 'First Name is required',
+                  })}
                   type="text"
                   name="firstname"
-                  value={firstname}
-                  onChange={(e) => setFirstname(e.target.value)}
                   placeholder="Enter First Name"
-                  required
                   className="p-[1rem] w-full block md:w-[23rem] mt-0 bg-transparent border-2 h-[2.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
                 />
+                {errors.firstname && (
+                  <p className="text-red-500 -mb-3">{`${errors.firstname.message}`}</p>
+                )}
                 <label
                   htmlFor="firstname"
                   className="relative duration-300 -top-[4.35rem] -z-1 origin-0 text-gray-500"
                 >
                   First Name
                 </label>
-                <span className="text-sm text-red-600 hidden" id="error">
-                  First Name is required
-                </span>
               </div>
               <div className="relative z-0 w-full mt-6 mb-1">
                 <input
+                  {...register('middlename', {
+                    required: 'Middle Name is required',
+                  })}
                   type="text"
                   name="middlename"
-                  value={middlename}
-                  onChange={(e) => setMiddlename(e.target.value)}
                   placeholder="Enter MIddle Name"
-                  required
                   className="p-[1rem] w-full block md:w-[23rem] mt-0 bg-transparent border-2 h-[2.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
                 />
+                {errors.middlename && (
+                  <p className="text-red-500 -mb-3">{`${errors.middlename.message}`}</p>
+                )}
                 <label
                   htmlFor="middlename"
                   className="relative duration-300 -top-[4.35rem] -z-1 origin-0 text-gray-500"
                 >
                   Middle Name
                 </label>
-                <span className="text-sm text-red-600 hidden" id="error">
-                  Middle Name is required
-                </span>
               </div>
               <div className="relative mt-6 -top-2  z-0 w-full mb-1">
                 <input
+                  {...register('phone', {
+                    required: 'Phone Number is required',
+                  })}
                   type="number"
                   name="phone"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
                   placeholder="Enter Phone Number"
-                  required
                   className="p-[1rem] w-full block md:w-[23rem] mt-0 bg-transparent border-2 h-[2.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
                 />
+                {errors.phone && (
+                  <p className="text-red-500 -mb-3">{`${errors.phone.message}`}</p>
+                )}
                 <label
                   htmlFor="phone"
                   className="relative duration-300 -top-[4.35rem] -z-1 origin-0 text-gray-500"
                 >
                   Phone Number
                 </label>
-                <span className="text-sm text-red-600 hidden" id="error">
-                  Phone Number is required
-                </span>
               </div>
               <div className="relative mt-6 mb-1 -top-2 z-0 w-[23rem]">
                 <select
+                  {...register('role', { required: 'Role is required' })}
                   name="role"
-                  value={rolevalue}
-                  onChange={handleRoleChange}
-                  required
                   className="block appearance-none w-full border-2 border-basecolor hover:border-gray-500 px-4 py-2 pr-8 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 >
                   <option value={''} disabled hidden>
@@ -169,6 +120,9 @@ export const AddUser = () => {
                     USER
                   </option>
                 </select>
+                {errors.role && (
+                  <p className="text-red-500 -mb-3">{`${errors.role.message}`}</p>
+                )}
                 <label
                   htmlFor="role"
                   className="relative duration-300 -top-[4.35rem] -z-1 origin-0 text-gray-500"
@@ -190,72 +144,74 @@ export const AddUser = () => {
               </div>
               <div className="relative z-0 w-full mt-3 mb-1">
                 <input
+                  {...register('lastname', {
+                    required: 'Last Name is required',
+                  })}
                   type="text"
                   name="lastname"
-                  value={lastname}
-                  onChange={(e) => setLastname(e.target.value)}
                   placeholder="Enter Last Name"
-                  required
                   className="p-[1rem] w-full block md:w-[23rem] mt-0 bg-transparent border-2 h-[2.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
                 />
+                {errors.lastname && (
+                  <p className="text-red-500 -mb-3">{`${errors.lastname.message}`}</p>
+                )}
                 <label
                   htmlFor="lastname"
                   className="relative duration-300 -top-[4.35rem] -z-1 origin-0 text-gray-500"
                 >
                   Last Name
                 </label>
-                <span className="text-sm text-red-600 hidden" id="error">
-                  Last Name is required
-                </span>
               </div>
               <div className="relative z-0 w-full mt-6 mb-1">
                 <input
+                  {...register('email', { required: 'Email is required' })}
                   type="email"
                   name="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter Email"
-                  required
                   className="p-[1rem] w-full block md:w-[23rem] mt-0 bg-transparent border-2 h-[2.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
                 />
+                {errors.email && (
+                  <p className="text-red-500 -mb-3">{`${errors.email.message}`}</p>
+                )}
                 <label
                   htmlFor="email"
                   className="relative duration-300 -top-[4.35rem] -z-1 origin-0 text-gray-500"
                 >
                   Email
                 </label>
-                <span className="text-sm text-red-600 hidden" id="error">
-                  Email is required
-                </span>
               </div>
               <div className="relative mt-6 -top-2 z-0 w-full mb-1">
                 <input
+                  {...register('branchId', {
+                    required: 'Branch ID is required',
+                  })}
                   type="text"
                   name="branchId"
-                  value={branchId}
-                  onChange={(e) => setBranchId(e.target.value)}
                   placeholder="Enter Branch ID"
-                  required
                   className="uppercase p-[1rem] w-full block md:w-[23rem] mt-0 bg-transparent border-2 h-[2.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
                 />
+                {errors.branchId && (
+                  <p className="text-red-500 -mb-3">{`${errors.branchId.message}`}</p>
+                )}
                 <label
                   htmlFor="branchid"
                   className="relative duration-300 -top-[4.35rem] -z-1 origin-0 text-gray-500"
                 >
                   Branch ID
                 </label>
-                <span className="text-sm text-red-600 hidden" id="error">
-                  Branch ID is required
-                </span>
               </div>
               <div className="relative mt-6 -top-2 z-0 w-full mb-1">
                 <input
+                  {...register('password', {
+                    required: 'Password is required',
+                    minLength: {
+                      value: 5,
+                      message: 'Password must be at least 5 characters long',
+                    },
+                  })}
                   type="password"
                   name="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter Password"
-                  required
                   className="p-[1rem] w-full block md:w-[23rem] mt-0 bg-transparent border-2 h-[2.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
                 />
                 <label
@@ -264,22 +220,16 @@ export const AddUser = () => {
                 >
                   Enter Password
                 </label>
-                <span className="text-sm text-red-600 hidden" id="error">
-                  Password is required
-                </span>
               </div>
             </div>
-            <div className="flex justify-center mt-2 relative -top-[3rem]">
+            <div className="md:w-[23rem] flex justify-center mt-2 relative -top-[3rem]">
               <input
+                disabled={isSubmitting}
                 id="button"
                 type="submit"
-                value={isLoading ? 'Adding User...' : 'Add User'}
-                className="mb-[6.5rem] mt-[4.25rem] w-full font-semibold px-6 py-3 text-md transition-all duration-150 ease-linear shadow outline-none bg-basecolor  hover:bg-black text-black hover:text-white hover:shadow-lg focus:outline-none"
+                className="mb-[6.5rem] disabled:bg-slate-700 mt-[4.25rem] w-full font-semibold px-6 py-3 text-md transition-all duration-150 ease-linear shadow outline-none bg-basecolor  hover:bg-black text-black hover:text-white hover:shadow-lg focus:outline-none"
               />
             </div>
-            {error && (
-              <p className="text-red-500 font-bold relative -top-5">{error}</p>
-            )}
           </form>
         </div>
       </DefaultLayout>

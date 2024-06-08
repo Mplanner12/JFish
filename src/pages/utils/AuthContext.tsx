@@ -26,15 +26,16 @@ interface AuthContextValue {
 
   // User Management
   AddNewUser: (userInfo: {
-    id: string;
-    firstname: string;
-    middlename: string;
-    lastname: string;
-    phone: string;
-    email: string;
-    role: string;
-    branchId: string;
-    password: string;
+    // id: string;
+    // firstname: string;
+    // middlename: string;
+    // lastname: string;
+    // phone: string;
+    // email: string;
+    // role: string;
+    // branchId: string;
+    // password: string;
+    data: string;
   }) => Promise<void>;
   updateUser: (userInfo: {
     id: string;
@@ -183,9 +184,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       const data = await response.json();
       if (response.ok && data.message === 'Successful') {
-        // let token = data.data.accessToken;
-        // console.log(token);
-        // console.log(data.data);
         localStorage.setItem('authToken', data.data.accessToken);
         localStorage.setItem('userInfo', data.data);
         alert('Login successful!');
@@ -196,12 +194,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return user;
       } else {
         navigate('/auth/welcomeBack');
-        alert('Unauthorized');
         console.log('not authenticated');
         // notify2();
       }
     } catch (error) {
       console.error('Error:', error);
+      alert('Incorrect Username or Password');
     }
   };
 
@@ -372,15 +370,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // USER MANAGEMENT
   const AddNewUser = async (userInfo: {
-    id: string;
-    firstname: string;
-    middlename: string;
-    lastname: string;
-    email: string;
-    phone: string;
-    branchId: string;
-    password: string;
-    role: string;
+    data: string;
   }) => {
     setLoading(true);
     let token = localStorage.getItem('authToken');
