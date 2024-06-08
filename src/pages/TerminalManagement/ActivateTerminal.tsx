@@ -1,23 +1,22 @@
 import DefaultLayout from '@/layout/DefaultLayout';
-import { useRef, useState } from 'react';
 import { useAuth } from '../utils/AuthContext';
+import { useForm } from 'react-hook-form';
 
 export const ActivateTerminal = () => {
-  const ActivateTerminalRef = useRef<HTMLFormElement>(null);
-  const [serialNo, setSerialNo] = useState<string>('');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm();
+
   const { ActivateTerminal } = useAuth();
-  const [isLoading] = useState<boolean>(false);
 
-  const handleActivateTerminal = async (
-    e: React.FormEvent<HTMLFormElement>,
-  ) => {
-    e.preventDefault();
-
-    const serialNumber = ActivateTerminalRef.current?.serialNo.value as string;
-
-    const termianlInfo = { serialNumber };
-    ActivateTerminal(termianlInfo);
-  };
+  function onSubmit(data: any) {
+    console.log(data);
+    ActivateTerminal(data);
+    reset();
+  }
 
   return (
     <DefaultLayout>
@@ -30,38 +29,36 @@ export const ActivateTerminal = () => {
             ACTIVATE TERMINAL
           </h1>
         </div>
-        <form
-          id="form"
-          noValidate
-          ref={ActivateTerminalRef}
-          onSubmit={handleActivateTerminal}
-        >
+        <form id="form" noValidate onSubmit={handleSubmit(onSubmit)}>
           <div className="relative mt-[3rem] -top-2  z-0 w-full mb-1">
             <input
-              value={serialNo}
-              onChange={(e) => setSerialNo(e.target.value)}
+              {...register('serialNo', {
+                required: 'Serial number is required',
+              })}
               type="number"
               name="serialNo"
               placeholder="Enter Serial number"
               required
               className="p-[1rem] block w-full mt-0 bg-transparent border-2 h-[3.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
             />
+            {errors.serialNo && (
+              <p className="text-red-500">{`${errors.serialNo.message}`}</p>
+            )}
             <label
               htmlFor="serial-no"
               className="relative duration-300 -top-[5.25rem] -z-1 origin-0 text-gray-500"
             >
               Serial number
             </label>
-            <span className="text-sm text-red-600 hidden" id="error">
-              Serial number is required
-            </span>
           </div>
 
           <div className="flex justify-center mt-2 relative -top-[3rem]">
             <input
               id="button"
               type="submit"
-              value={isLoading ? 'Activating Terminal...' : 'Activate Terminal'}
+              value={
+                isSubmitting ? 'Activating Terminal...' : 'Activate Terminal'
+              }
               className="mb-[6.5rem] mt-[4.25rem] w-full font-semibold px-6 py-3 text-md transition-all duration-150 ease-linear shadow outline-none bg-basecolor  hover:bg-black text-black hover:text-white hover:shadow-lg focus:outline-none"
             />
           </div>

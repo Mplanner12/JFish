@@ -25,50 +25,18 @@ interface AuthContextValue {
   fetchUsers: () => Promise<void>;
 
   // User Management
-  AddNewUser: (userInfo: {
-    // id: string;
-    // firstname: string;
-    // middlename: string;
-    // lastname: string;
-    // phone: string;
-    // email: string;
-    // role: string;
-    // branchId: string;
-    // password: string;
-    data: string;
-  }) => Promise<void>;
-  updateUser: (userInfo: {
-    id: string;
-    firstname: string;
-    middlename: string;
-    lastname: string;
-    phone: string;
-    email: string;
-    role: string;
-    branchId: string;
-  }) => Promise<void>;
+  AddNewUser: (userInfo: { data: string }) => Promise<void>;
+  updateUser: (userInfo: { data: string }) => Promise<void>;
   deleteUser: (id: { id: string }) => Promise<void>;
 
   //  Branch Management
-  AddNewBranch: (branchInfo: {
-    // id: string;
-    name: string;
-    address: string;
-  }) => Promise<void>;
-  UpdateBranch: (branchInfo: {
-    id: string;
-    name: string;
-    address: string;
-  }) => Promise<void>;
+  AddNewBranch: (branchInfo: { data: string }) => Promise<void>;
+  UpdateBranch: (branchInfo: { data: string }) => Promise<void>;
   DeleteBranch: (id: { id: string }) => Promise<void>;
 
   // Terminal Management
-  AddNewTerminal: (terminalInfo: {
-    imei: string;
-    serialNumber: string;
-    branchId: string;
-  }) => Promise<void>;
-  ActivateTerminal: (terminalInfo: { serialNumber: string }) => Promise<void>;
+  AddNewTerminal: (terminalInfo: { data: string }) => Promise<void>;
+  ActivateTerminal: (terminalInfo: { data: string }) => Promise<void>;
   DeleteTerminal: (branchId: { branchId: string }) => Promise<void>;
 
   // Item Management
@@ -223,7 +191,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         },
       });
       const data = await response.json();
-      // console.log(data);
+      // console.lg(data);o
+      return data;
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -369,9 +338,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   // USER MANAGEMENT
-  const AddNewUser = async (userInfo: {
-    data: string;
-  }) => {
+  const AddNewUser = async (userInfo: { data: string }) => {
     setLoading(true);
     let token = localStorage.getItem('authToken');
     console.log(token);
@@ -406,16 +373,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     navigate('/UserManagement');
   };
 
-  const updateUser = async (userInfo: {
-    id: string;
-    firstname: string;
-    middlename: string;
-    lastname: string;
-    phone: string;
-    email: string;
-    role: string;
-    branchId: string;
-  }) => {
+  const updateUser = async (userInfo: { data: string }) => {
     const token = localStorage.getItem('authToken');
     console.log(token);
     try {
@@ -450,8 +408,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const deleteUser = async (id: { id: string }) => {
-    // setIsLoading(true);
-    // setError(null);
     const token = localStorage.getItem('authToken');
     console.log(token);
     try {
@@ -488,11 +444,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   // BRANCH MANAGEMENT
-  const AddNewBranch = async (BranchInfo: {
-    // id: string;
-    name: string;
-    address: string;
-  }) => {
+  const AddNewBranch = async (BranchInfo: { data: string }) => {
     setLoading(true);
     let token = localStorage.getItem('authToken');
     console.log(token);
@@ -527,11 +479,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     navigate('/BranchManagement');
   };
 
-  const UpdateBranch = async (BranchInfo: {
-    id: string;
-    name: string;
-    address: string;
-  }) => {
+  const UpdateBranch = async (BranchInfo: { data: string }) => {
     setLoading(true);
     let token = localStorage.getItem('authToken');
     console.log(BranchInfo);
@@ -603,11 +551,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   // TERMINAL MANAGEMENT
-  const AddNewTerminal = async (terminalInfo: {
-    serialNumber: string;
-    imei: string;
-    branchId: string;
-  }) => {
+  const AddNewTerminal = async (terminalInfo: { data: string }) => {
     setLoading(true);
     let token = localStorage.getItem('authToken');
     console.log(terminalInfo);
@@ -641,7 +585,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     navigate('/TerminalManagement');
   };
 
-  const ActivateTerminal = async (terminalInfo: { serialNumber: string }) => {
+  const ActivateTerminal = async (terminalInfo: { data: string }) => {
     setLoading(true);
     let token = localStorage.getItem('authToken');
     console.log(terminalInfo);
