@@ -82,7 +82,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // check if user is logged in or not
   const checkUserStatus = async () => {
     let token = localStorage.getItem('authToken');
-    if (token !== null || token !== undefined || token !== '') {
+    // if (token !== null || token !== undefined || token !== '') {
+    if (token) {
       navigate(location.pathname);
     } else {
       navigate('/auth/welcomeback');
