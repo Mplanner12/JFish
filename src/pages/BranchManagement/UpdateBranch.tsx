@@ -1,8 +1,15 @@
 import DefaultLayout from '@/layout/DefaultLayout';
 import { useAuth } from '../utils/AuthContext';
 import { useForm } from 'react-hook-form';
+// import { useEffect, useState } from 'react';
+// import { useParams } from 'react-router-dom';
 
 export const UpdateBranch = () => {
+  // const id = useParams();
+  // const [branchDetails, setBranchDetails] = useState();
+  // const [branchID, setBranchID] = useState(id);
+  // const [branchName, setBranchName] = useState();
+  // const [branchAddress, setBranchAddress] = useState();
   const { UpdateBranch } = useAuth();
   const {
     register,
@@ -10,6 +17,24 @@ export const UpdateBranch = () => {
     formState: { errors, isSubmitting },
     reset,
   } = useForm();
+
+  // useEffect(() => {
+  //   const fetchBranches = async () => {
+  //     const response = await fetchWithAuth(
+  //       'http://185.4.176.195:8989/api/branches/' + id,
+  //       {
+  //         method: 'GET',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //       },
+  //     );
+  //     const rawdata = await response.json();
+  //     const data = rawdata.data;
+  //     setBranchDetails(data);
+  //     console.log(branchDetails);
+  //   };
+  // }, [id]);
 
   function onSubmit(data: any) {
     console.log(data);
@@ -33,6 +58,8 @@ export const UpdateBranch = () => {
               })}
               type="text"
               name="id"
+              // value={branchID}
+              // onChange={(e) => setBranchID(e.target.value)}
               placeholder="54678-6487-abc4-46JTF"
               className="p-[1rem] block w-full mt-0 bg-transparent border-2 h-[3.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
             />

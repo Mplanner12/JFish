@@ -32,11 +32,11 @@ export const ActivateTerminal = () => {
         <form id="form" noValidate onSubmit={handleSubmit(onSubmit)}>
           <div className="relative mt-[3rem] -top-2  z-0 w-full mb-1">
             <input
-              {...register('serialNo', {
+              {...register('serialNumber', {
                 required: 'Serial number is required',
               })}
               type="number"
-              name="serialNo"
+              name="serialNumber"
               placeholder="Enter Serial number"
               required
               className="p-[1rem] block w-full mt-0 bg-transparent border-2 h-[3.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"

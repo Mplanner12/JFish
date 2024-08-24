@@ -119,7 +119,9 @@ export const columns: ColumnDef<UsersDataType>[] = [
               onClick={() => navigator.clipboard.writeText(userData.id)}
             >
               <div className="flex justify-between">
-                <button onClick={() => navigate('/UserManagement/updateuser')}>
+                <button
+                  onClick={() => navigate(`/UserManagement/updateuser/${id}`)}
+                >
                   <img src="editicon.png" alt="" />
                   <p>Update Info</p>
                 </button>

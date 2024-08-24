@@ -22,8 +22,8 @@ import { useAuth } from '../utils/AuthContext';
 // You can use a Zod schema here if you want.
 export type TerminalDataType = {
   branch: string;
-  SerielNumber: string;
-  IMEI: string;
+  serialNumber: string;
+  imei: string;
 };
 
 export const columns: ColumnDef<TerminalDataType>[] = [
@@ -33,7 +33,7 @@ export const columns: ColumnDef<TerminalDataType>[] = [
   },
   {
     accessorKey: 'serialNumber',
-    header: 'Seriel Number',
+    header: 'Serial Number',
   },
   {
     accessorKey: 'imei',
@@ -54,15 +54,15 @@ export const columns: ColumnDef<TerminalDataType>[] = [
     id: 'actions',
     cell: ({ row }) => {
       const TerminalData = row.original;
-      const terminaliId = TerminalData.branch;
-      const [branchId, SetBranchId] = useState(terminaliId);
+      const terminalSerialNo = TerminalData.serialNumber;
+      const [serialNo, setSerialNo] = useState(terminalSerialNo);
 
       const { DeleteTerminal } = useAuth();
 
       function handleDeleteTerminal() {
-        SetBranchId(terminaliId);
-        DeleteTerminal({ branchId: branchId });
-        console.log(branchId);
+        setSerialNo(terminalSerialNo);
+        DeleteTerminal({ serialNumber: serialNo });
+        console.log(serialNo);
       }
 
       const navigate = useNavigate();
@@ -78,7 +78,7 @@ export const columns: ColumnDef<TerminalDataType>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(TerminalData.IMEI)}
+              onClick={() => navigator.clipboard.writeText(TerminalData.imei)}
             >
               <div className="flex justify-between">
                 <div className=" rounded-s-sm">

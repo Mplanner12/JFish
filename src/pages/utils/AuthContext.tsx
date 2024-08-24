@@ -37,7 +37,7 @@ interface AuthContextValue {
   // Terminal Management
   AddNewTerminal: (terminalInfo: { data: string }) => Promise<void>;
   ActivateTerminal: (terminalInfo: { data: string }) => Promise<void>;
-  DeleteTerminal: (branchId: { branchId: string }) => Promise<void>;
+  DeleteTerminal: (serialNumber: { serialNumber: string }) => Promise<void>;
 
   // Item Management
   AddNewItem: (itemInfo: {
@@ -81,12 +81,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // check if user is logged in or not
   const checkUserStatus = async () => {
-    let token = localStorage.getItem('authToken');
-    // if (token !== null || token !== undefined || token !== '') {
-    if (token) {
+    if (localStorage.getItem('authToken') !== undefined || null) {
       navigate(location.pathname);
     } else {
-      navigate('/auth/welcomeback');
+      logoutUser();
     }
 
     setLoading(false);
@@ -154,9 +152,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const data = await response.json();
       if (response.ok && data.message === 'Successful') {
         localStorage.setItem('authToken', data.data.accessToken);
-        localStorage.setItem('userInfo', data.data);
-        alert('Login successful!');
+        localStorage.setItem('userDetails', data.data);
+        // const userInfo = localStorage.getItem('userDetails');
+        // console.log(userInfo);
         navigate('/');
+        alert('Login successful!');
         // console.log(typeof localStorage.getItem('authToken'));
         // Redirect or update the UI as needed
         let user = data.data;
@@ -605,7 +605,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       const data = await response.json();
 
-      if (response.ok && data.message === 'Successful') {
+      if (response.ok && data.success === true) {
         alert('Terminal activated successfully');
         console.log(data.message);
         console.log(data.data);
@@ -623,13 +623,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     navigate('/TerminalManagement');
   };
 
-  const DeleteTerminal = async (branchId: { branchId: string }) => {
+  const DeleteTerminal = async (serialNumber: { serialNumber: string }) => {
     setLoading(true);
     let token = localStorage.getItem('authToken');
-    console.log(branchId);
+    console.log(serialNumber);
     try {
       const response = await fetch(
-        `http://185.4.176.195:8989/api/terminals/${branchId.branchId}`,
+        `http://185.4.176.195:8989/api/terminals/${serialNumber.serialNumber}`,
         {
           method: 'DELETE',
           headers: {

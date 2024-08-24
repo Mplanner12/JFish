@@ -164,7 +164,12 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  <div className="flex flex-col justify-center">
+                    No results.
+                    <span className="text-red-500">
+                      Your session might have expired and have to re-login
+                    </span>
+                  </div>
                 </TableCell>
               </TableRow>
             )}

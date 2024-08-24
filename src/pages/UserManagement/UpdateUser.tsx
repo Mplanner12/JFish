@@ -1,8 +1,59 @@
 import DefaultLayout from '@/layout/DefaultLayout';
 import { useAuth } from '../utils/AuthContext';
 import { useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 export const UpdateUser = () => {
+  const { fetchWithAuth } = useAuth();
+
+  const [loading, setLoading] = useState(false);
+  // const [userId, setUserId] = useState('');
+  const [firstname, setFirstName] = useState('');
+  const [middlename, setMiddleName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [role, setRole] = useState('');
+  const [email, setEmail] = useState('');
+  const [branchId, setBranchId] = useState('');
+
+  const [data, setData] = useState('');
+
+  const { id } = useParams();
+
+  async function fetchUser() {
+    try {
+      const response = await fetchWithAuth(
+        `http://185.4.176.195:8989/api/users/profile/${id}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      const rawdata = await response.json();
+      setData(rawdata.data);
+      // setUserId(rawdata.data.id);
+      setFirstName(rawdata.data.firstname);
+      setMiddleName(rawdata.data.middlename);
+      setLastName(rawdata.data.lastname);
+      setPhone(rawdata.data.phone);
+      setRole(rawdata.data.role);
+      setEmail(rawdata.data.email);
+      setBranchId(rawdata.data.branch);
+      console.log(data);
+    } catch (error) {
+      // setError('An error occurred. Please try again.');
+      console.error('Error:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
   const { updateUser } = useAuth();
 
   const {
@@ -35,13 +86,15 @@ export const UpdateUser = () => {
             onSubmit={handleSubmit(onSubmit)}
           >
             <div className="w-full md:px-[1.5rem]">
-              <div className="relative z-0 w-full mb-1">
+              {/* <div className="relative z-0 w-full mb-1">
                 <input
                   {...register('id', {
                     required: 'ID is required',
                   })}
-                  type="text"
+                  value={userId}
+                  onChange={(e) => setUserId(e.target.value)}
                   name="id"
+                  type="text"
                   placeholder="98fa79-k8h1-252u-0252-r5817936858"
                   required
                   className="p-[1rem] w-full block  mt-0 bg-transparent border-2 h-[2.5rem] focus:outline-none focus:ring-0 focus:border-black border-basecolor"
@@ -55,12 +108,14 @@ export const UpdateUser = () => {
                 >
                   ID
                 </label>
-              </div>
+              </div> */}
               <div className="relative z-0 w-full mt-6 mb-1">
                 <input
                   {...register('firstname', {
                     required: 'First Name is required',
                   })}
+                  value={firstname}
+                  onChange={(e) => setFirstName(e.target.value)}
                   type="text"
                   name="firstname"
                   placeholder="Adams"
@@ -82,6 +137,8 @@ export const UpdateUser = () => {
                   {...register('middlename', {
                     required: 'Middle Name is required',
                   })}
+                  value={middlename}
+                  onChange={(e) => setMiddleName(e.target.value)}
                   type="text"
                   name="middlename"
                   placeholder="Hassan"
@@ -103,6 +160,8 @@ export const UpdateUser = () => {
                   {...register('phone', {
                     required: 'Phone Number is required',
                   })}
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
                   type="number"
                   name="phone"
                   placeholder="09030445778"
@@ -124,6 +183,8 @@ export const UpdateUser = () => {
                   {...register('role', {
                     required: 'Role is required',
                   })}
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
                   name="role"
                   className="block appearance-none w-full h-[2.5rem] border-basecolor border-2 hover:border-gray-500 px-4 py-2 pr-8 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 >
@@ -159,6 +220,8 @@ export const UpdateUser = () => {
                   {...register('lastname', {
                     required: 'Last Name is required',
                   })}
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
                   type="text"
                   name="lastname"
                   placeholder="Taiwo"
@@ -179,6 +242,8 @@ export const UpdateUser = () => {
                   {...register('email', {
                     required: 'Email is required',
                   })}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   type="email"
                   name="email"
                   placeholder="ad@jtf.com"
@@ -200,6 +265,8 @@ export const UpdateUser = () => {
                   {...register('branchId', {
                     required: 'Branch ID is required',
                   })}
+                  value={branchId}
+                  onChange={(e) => setBranchId(e.target.value)}
                   type="text"
                   name="branchId"
                   placeholder="kubwa_branch"
@@ -210,7 +277,7 @@ export const UpdateUser = () => {
                   <p className="text-red-500 text-sm">{`${errors.branchId.message}`}</p>
                 )}
                 <label
-                  htmlFor="branchid"
+                  htmlFor="branchId"
                   className="relative duration-300 -top-[4.35rem] -z-1 origin-0 text-gray-500"
                 >
                   Branch ID

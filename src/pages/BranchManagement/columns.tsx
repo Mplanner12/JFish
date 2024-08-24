@@ -1,5 +1,5 @@
 'use client';
-
+import { Link } from 'react-router-dom';
 import { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal } from 'lucide-react';
 
@@ -12,7 +12,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../utils/AuthContext';
 
@@ -65,8 +64,6 @@ export const columns: ColumnDef<BranchDataType>[] = [
         console.log(id);
       }
 
-      const navigate = useNavigate();
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -82,11 +79,11 @@ export const columns: ColumnDef<BranchDataType>[] = [
             >
               <div className="flex justify-between">
                 <img src="editicon.png" alt="" />
-                <button
-                  onClick={() => navigate('/BranchManagement/updatebranch')}
-                >
-                  <p className="px-2">Update Branch</p>
-                </button>
+                <Link to={`/BranchManagement/updatebranch/${id}`}>
+                  <button>
+                    <p className="px-2">Update Branch</p>
+                  </button>
+                </Link>
               </div>
             </DropdownMenuItem>
             <DropdownMenuSeparator />

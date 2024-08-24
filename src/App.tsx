@@ -89,7 +89,7 @@ function App() {
           }
         />
         <Route
-          path="/UserManagement/updateuser"
+          path="/UserManagement/updateuser/:id"
           element={
             <>
               <PageTitle title="Update User | JTFish APP" />
@@ -126,7 +126,7 @@ function App() {
           }
         />
         <Route
-          path="/BranchManagement/updatebranch"
+          path="/BranchManagement/updatebranch/:id"
           element={
             <>
               <PageTitle title="Branch Management | JTFish APP" />

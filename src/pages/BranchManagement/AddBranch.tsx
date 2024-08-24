@@ -10,11 +10,13 @@ export const AddBranch = () => {
     formState: { errors, isSubmitting },
     reset,
   } = useForm();
+
   function onSubmit(data: any) {
     console.log(data);
     AddNewBranch(data);
     reset();
   }
+
   return (
     <DefaultLayout>
       <div className="w-full md:w-[43rem] mx-auto md:px-[3.5rem] py-12 bg-white border-0 text-black">
@@ -69,6 +71,7 @@ export const AddBranch = () => {
           </div>
           <div className="flex justify-center mt-2 relative -top-[3rem]">
             <input
+              disabled={isSubmitting}
               id="button"
               type="submit"
               value={isSubmitting ? 'Adding branch...' : 'Add Branch'}
